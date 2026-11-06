@@ -21,12 +21,16 @@ const TOOLTIP_WIDTH = 271.1 // Figma 1:261
 const TOOLTIP_GAP = 16 // crosshair → tooltip
 const POINT = { w: 34.5981, h: 28.4311 } // native size of the point SVGs (incl. drop-shadow bleed)
 
+/** Phones: the plot is drawn this wide and panned horizontally (~3px per day, ≈3 months on screen). */
+const MOBILE_PLOT_WIDTH = 820
+
 const pct = (x: number, total: number) => `${(x / total) * 100}%`
 
 /** Figma node 1:213 — Cash Flow card. */
 export function CashFlowCard() {
   const series = useSeries()
   const plotRef = useRef<HTMLDivElement>(null)
+  const scrollRef = useRef<HTMLDivElement>(null)
   const [pinnedDay, setPinnedDay] = useState<number | null>(null) // null = Figma's pinned state
   const [hoverDay, setHoverDay] = useState<number | null>(null)
 
@@ -37,6 +41,19 @@ export function CashFlowCard() {
     const rect = plotRef.current?.getBoundingClientRect()
     if (!rect) return null
     return xToDay(((clientX - rect.left) / rect.width) * PLOT.width)
+  }, [])
+
+  /** true when the plot is wider than its viewport (phones) → touch pans instead of scrubbing */
+  const isPannable = () => {
+    const el = scrollRef.current
+    return !!el && el.scrollWidth > el.clientWidth + 1
+  }
+
+  // Phones: open the zoomed chart centred on the highlighted week, not on January.
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el || el.scrollWidth <= el.clientWidth) return
+    el.scrollLeft = (PINNED_READOUT.x / PLOT.width) * el.scrollWidth - el.clientWidth / 2
   }, [])
 
   const net = readout.income - readout.expenses
@@ -84,11 +101,11 @@ export function CashFlowCard() {
 
       {/* Chart — 1:229 */}
       <div className="flex flex-col gap-2">
-        <div className="flex h-[262px] items-center gap-2 sm:gap-4">
-          {/* Y axis — 1:231 */}
+        <div className="flex items-start gap-2 sm:gap-4">
+          {/* Y axis — 1:231 (stays put while the plot pans on phones) */}
           <div
             aria-hidden
-            className="flex h-full w-9 shrink-0 flex-col items-end justify-between text-right text-xs leading-axis font-medium text-fg-muted sm:w-12 sm:text-sm"
+            className="flex h-[262px] w-9 shrink-0 flex-col items-end justify-between text-right text-xs leading-axis font-medium text-fg-muted sm:w-12 sm:text-sm"
           >
             {Y_TICKS.map((t) => (
               <span key={t} className="w-full">
@@ -98,8 +115,19 @@ export function CashFlowCard() {
             ))}
           </div>
 
+          {/* Phones: horizontal scroller so the 9-month series isn't crushed into ~280px.
+              Edge fades hint that there's more to either side. ≥ md it's a plain box. */}
+          <div
+            ref={scrollRef}
+            className={cn(
+              "min-w-0 flex-1",
+              "max-md:snap-none max-md:overflow-x-auto max-md:overscroll-x-contain max-md:[scrollbar-width:none] max-md:[&::-webkit-scrollbar]:hidden",
+              "max-md:[mask-image:linear-gradient(to_right,transparent,#000_14px,#000_calc(100%-14px),transparent)]"
+            )}
+          >
+            <div className="flex w-full flex-col gap-2 max-md:w-(--mobile-plot-width)" style={{ "--mobile-plot-width": `${MOBILE_PLOT_WIDTH}px` } as CSSProperties}>
           {/* Plot area — 1:238 */}
-          <div className="flex h-full min-w-0 flex-1 flex-col py-2">
+          <div className="flex h-[262px] min-w-0 flex-col py-2">
             <div
               ref={plotRef}
               tabIndex={0}
@@ -107,15 +135,18 @@ export function CashFlowCard() {
               aria-roledescription="chart"
               aria-label="Cash flow, income versus expenses, Jan 1 to Sep 30 2026. Use the left and right arrow keys to move between days, Shift for a week, Home and End to jump to the ends."
               aria-describedby="cashflow-readout"
-              className="relative h-[246px] w-full touch-pan-y outline-none select-none focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--ring-focus)"
+              className="relative h-[246px] w-full touch-manipulation outline-none md:touch-pan-y select-none focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--ring-focus)"
               onPointerMove={(e) => {
                 if (!series) return
+                // on phones a finger drag pans the zoomed chart; don't scrub underneath it
+                if (e.pointerType !== "mouse" && isPannable()) return
                 setHoverDay(dayFromPointer(e.clientX))
               }}
               onPointerDown={(e) => {
-                // touch: scrub immediately on press (horizontal drags; vertical still scrolls the page)
-                if (series && e.pointerType !== "mouse") setHoverDay(dayFromPointer(e.clientX))
+                // larger touch screens: scrub immediately on press (vertical drags still scroll the page)
+                if (series && e.pointerType !== "mouse" && !isPannable()) setHoverDay(dayFromPointer(e.clientX))
               }}
+              onPointerCancel={() => setHoverDay(null)}
               onPointerUp={(e) => {
                 // touch: lifting the finger pins wherever you scrubbed to
                 if (series && e.pointerType !== "mouse") {
@@ -214,10 +245,9 @@ export function CashFlowCard() {
               </div>
             </div>
           </div>
-        </div>
 
-        {/* X axis — labels centred on the month gridlines */}
-        <div aria-hidden className="relative ml-11 h-[17px] text-center text-xs leading-axis sm:ml-16 sm:text-sm">
+        {/* X axis — labels centred on the month gridlines; scrolls with the plot */}
+        <div aria-hidden className="relative h-[17px] text-center text-xs leading-axis sm:text-sm">
           {MONTHS.map((m, i) => (
             <span
               key={m}
@@ -234,6 +264,11 @@ export function CashFlowCard() {
             </span>
           ))}
         </div>
+            </div>
+          </div>
+        </div>
+
+        <p className="text-center text-xs font-medium text-fg-subtle md:hidden">Swipe to pan · tap a day for details</p>
       </div>
 
       <p id="cashflow-readout" aria-live="polite" className="sr-only">
