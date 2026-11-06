@@ -1,0 +1,545 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/*
+ * ============================================================================
+ *  STATSNAP DESIGN SYSTEM — TOKENS
+ *  Source of truth: Figma "Finance Dashboard — Redesign" (node 1:3)
+ *  Full documentation lives in /DESIGN_SYSTEM.md
+ *
+ *  Layering:
+ *    1. Primitives  (--sn-*)       raw palette values, never used in components
+ *    2. Semantic    (--bg-*, --fg-*, --border-*, …)  what components consume
+ *    3. shadcn map  (--background, --primary, …)     so shadcn/ui inherits it
+ *    4. @theme      Tailwind utilities (bg-surface, text-fg-muted, shadow-card…)
+ * ============================================================================
+ */
+
+@custom-variant dark (&:is(.dark *));
+
+/* ---------------------------------------------------------------------------
+ * 1. PRIMITIVES
+ * ------------------------------------------------------------------------ */
+:root {
+  /* Neutral ramp (Figma hex values, light → dark) */
+  --sn-neutral-0: #ffffff;
+  --sn-neutral-25: #fafafa;
+  --sn-neutral-50: #f5f5f5;
+  --sn-neutral-75: #ededed;
+  --sn-neutral-80: #ececec;
+  --sn-neutral-100: #e7e7e7;
+  --sn-neutral-110: #e7e7e9;
+  --sn-neutral-150: #e0e0e0;
+  --sn-neutral-200: #cfcfcf;
+  --sn-neutral-300: #b3b3b3;
+  --sn-neutral-400: #a1a1a1;
+  --sn-neutral-450: #999999;
+  --sn-neutral-500: #757575;
+  --sn-neutral-800: #282828;
+  --sn-neutral-850: #22222a;
+  --sn-neutral-950: #09090b;
+
+  /* Dark-mode neutral ramp (derived, zinc-tinted) */
+  --sn-ink-950: #0b0b0d;
+  --sn-ink-900: #111114;
+  --sn-ink-850: #16161a;
+  --sn-ink-800: #1c1c21;
+  --sn-ink-700: #26262c;
+  --sn-ink-650: #2e2e35;
+  --sn-ink-500: #6b6b76;
+  --sn-ink-400: #8b8b96;
+  --sn-ink-300: #a1a1aa;
+  --sn-ink-100: #e4e4e7;
+  --sn-ink-50: #fafafa;
+
+  /* Brand blue */
+  --sn-blue-50: #f3f3fc;
+  --sn-blue-100: #cee0ff;
+  --sn-blue-400: #328ff9;
+  --sn-blue-500: #1067ff;
+  --sn-blue-300: #5b96ff;
+
+  /* Data + status hues */
+  --sn-orange-500: #ff8b39;
+  --sn-green-500: #00a475;
+  --sn-green-400: #22c08f;
+  --sn-red-500: #fa5050;
+  --sn-red-400: #ff6b6b;
+}
+
+/* ---------------------------------------------------------------------------
+ * 2. SEMANTIC TOKENS — LIGHT (default, matches Figma 1:1)
+ * ------------------------------------------------------------------------ */
+:root {
+  color-scheme: light;
+
+  /* Surfaces */
+  --bg-app: var(--sn-neutral-0); /* page background */
+  --bg-surface: var(--sn-neutral-0); /* cards, header, controls */
+  --bg-sunken: var(--sn-neutral-25); /* sidebar, table header */
+  --bg-hover: var(--sn-neutral-25); /* row / control hover */
+  --bg-pressed: var(--sn-neutral-50); /* control :active */
+  --bg-nav-hover: rgba(9, 9, 11, 0.04);
+  --bg-nav-active: rgba(16, 103, 255, 0.12);
+  --bg-avatar: var(--sn-blue-50);
+  --bg-tooltip: var(--sn-neutral-800);
+  --bg-overlay: rgba(9, 9, 11, 0.4);
+
+  /* Foreground */
+  --fg-strong: var(--sn-neutral-950); /* page + brand titles */
+  --fg-numeric: var(--sn-neutral-850); /* big KPI numbers */
+  --fg-default: var(--sn-neutral-800); /* body, card titles, table primary */
+  --fg-muted: var(--sn-neutral-500); /* labels, secondary text */
+  --fg-subtle: var(--sn-neutral-450); /* table column headers */
+  --fg-placeholder: var(--sn-neutral-500);
+  --fg-on-tooltip: var(--sn-neutral-0);
+  --fg-on-tooltip-muted: var(--sn-neutral-300);
+  --fg-accent: var(--sn-blue-500);
+  --fg-positive: var(--sn-green-500);
+  --fg-negative: var(--sn-red-500);
+
+  /* Icons (Figma icons are single-colour #A1A1A1, tinted via mask) */
+  --icon-default: var(--sn-neutral-400);
+  --icon-hover: var(--sn-neutral-500);
+  --icon-accent: var(--sn-blue-500);
+
+  /* Borders + rings */
+  --border-default: var(--sn-neutral-110); /* sidebar, table grid, dividers */
+  --border-subtle: var(--sn-neutral-100); /* header / brand separators */
+  --border-divider: var(--sn-neutral-80); /* sidebar section rules */
+  --ring-card: var(--sn-neutral-75); /* 1px ring around cards */
+  --ring-control: var(--sn-neutral-80); /* 1px ring around buttons/inputs */
+  --ring-control-raised: var(--sn-neutral-110);
+  --ring-focus: rgba(16, 103, 255, 0.45);
+
+  /* Accent */
+  --accent-solid: var(--sn-blue-500);
+  --accent-soft: rgba(16, 103, 255, 0.12);
+
+  /* Data visualisation */
+  --series-income: var(--sn-blue-500);
+  --series-income-ring: var(--sn-blue-400);
+  --series-expenses: var(--sn-orange-500);
+  --series-expenses-ring: var(--sn-orange-500);
+  --series-net: rgba(16, 103, 255, 0.24);
+  --series-net-ring: var(--sn-blue-100);
+  --chart-grid-opacity: 1;
+  --chart-crosshair: var(--sn-neutral-500);
+
+  /* Toggle (skeuomorphic switch from Figma) */
+  --toggle-track-from: #ebebeb;
+  --toggle-track-to: #e0e0e0;
+  --toggle-track-border: var(--sn-neutral-200);
+  --toggle-thumb-from: #ffffff;
+  --toggle-thumb-to: #dbdbdb;
+
+  /* Elevation (exact Figma drop-shadows) */
+  --shadow-card: 0px 1px 2px 0px rgba(18, 18, 18, 0.04), 0px 0px 0px 1px var(--ring-card);
+  --shadow-control: 0px 1px 2px 0px rgba(40, 40, 40, 0.08), 0px 0px 0px 1px var(--ring-control);
+  --shadow-control-raised: 0px 1px 2px 0px rgba(9, 9, 11, 0.08), 0px 0px 0px 1px var(--ring-control-raised);
+  --shadow-control-pressed: 0px 0px 0px 0px rgba(40, 40, 40, 0), 0px 0px 0px 1px var(--ring-control);
+  --shadow-avatar: 0px 1px 2px 0px rgba(40, 40, 40, 0.08), 0px 0px 0px 1px var(--ring-control);
+  --shadow-tooltip: 0px 2px 4px 0px rgba(9, 9, 11, 0.16), 0px 2px 4px 0px rgba(9, 9, 11, 0.08), 0px 0px 0px 1px var(--bg-tooltip);
+  --shadow-popover: 0px 8px 24px -4px rgba(9, 9, 11, 0.12), 0px 2px 4px 0px rgba(9, 9, 11, 0.06), 0px 0px 0px 1px var(--ring-card);
+  --shadow-chip-base: 0px 2px 4px 0px rgba(9, 9, 11, 0.16), 0px 1px 2px 0px rgba(9, 9, 11, 0.08);
+  --shadow-inner-glow: inset 0px 1px 20px 0px rgba(255, 255, 255, 0.16);
+  --shadow-toggle: inset 0px 0px 2px 0px rgba(0, 0, 0, 0.14);
+  --shadow-toggle-thumb: 0.2px 0.2px 1px 0px rgba(0, 0, 0, 0.08), 2px 2px 8px 0px rgba(0, 0, 0, 0.24), 0px 0px 0px 0.8px rgba(0, 0, 0, 0.16);
+  --shadow-toggle-thumb-inner: inset -1px -1px 5px 0px rgba(0, 0, 0, 0.08), inset 0px 0px 3px 2px rgba(255, 255, 255, 0.5);
+  --highlight-edge: var(--sn-neutral-0); /* 1px inner white edge on raised controls */
+
+  /* Motion (Emil Kowalski curves) */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --duration-instant: 0ms;
+  --duration-press: 120ms;
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-slow: 250ms;
+
+  /* Layout */
+  --sidebar-width: 260px;
+  --sidebar-width-collapsed: 62px;
+  --header-height: 62px;
+  --profile-height: 68px;
+}
+
+/* ---------------------------------------------------------------------------
+ * 2b. SEMANTIC TOKENS — DARK (designed extension, not in the Figma frame)
+ * ------------------------------------------------------------------------ */
+.dark {
+  color-scheme: dark;
+
+  --bg-app: var(--sn-ink-950);
+  --bg-surface: var(--sn-ink-900);
+  --bg-sunken: var(--sn-ink-950);
+  --bg-hover: var(--sn-ink-850);
+  --bg-pressed: var(--sn-ink-800);
+  --bg-nav-hover: rgba(255, 255, 255, 0.04);
+  --bg-nav-active: rgba(16, 103, 255, 0.18);
+  --bg-avatar: rgba(16, 103, 255, 0.14);
+  --bg-tooltip: var(--sn-ink-800);
+  --bg-overlay: rgba(0, 0, 0, 0.6);
+
+  --fg-strong: var(--sn-ink-50);
+  --fg-numeric: var(--sn-ink-50);
+  --fg-default: var(--sn-ink-100);
+  --fg-muted: var(--sn-ink-400);
+  --fg-subtle: var(--sn-ink-500);
+  --fg-placeholder: var(--sn-ink-500);
+  --fg-on-tooltip: var(--sn-ink-50);
+  --fg-on-tooltip-muted: var(--sn-ink-300);
+  --fg-accent: var(--sn-blue-300);
+  --fg-positive: var(--sn-green-400);
+  --fg-negative: var(--sn-red-400);
+
+  --icon-default: var(--sn-ink-500);
+  --icon-hover: var(--sn-ink-300);
+  --icon-accent: var(--sn-blue-300);
+
+  --border-default: var(--sn-ink-700);
+  --border-subtle: var(--sn-ink-700);
+  --border-divider: var(--sn-ink-700);
+  --ring-card: var(--sn-ink-700);
+  --ring-control: var(--sn-ink-650);
+  --ring-control-raised: var(--sn-ink-650);
+  --ring-focus: rgba(91, 150, 255, 0.55);
+
+  --accent-solid: var(--sn-blue-500);
+  --accent-soft: rgba(16, 103, 255, 0.18);
+
+  --series-net: rgba(91, 150, 255, 0.32);
+  --series-net-ring: rgba(91, 150, 255, 0.45);
+  --chart-grid-opacity: 0.12;
+  --chart-crosshair: var(--sn-ink-400);
+
+  --toggle-track-from: #2a6dff;
+  --toggle-track-to: #1067ff;
+  --toggle-track-border: rgba(255, 255, 255, 0.12);
+  --toggle-thumb-from: #ffffff;
+  --toggle-thumb-to: #e4e4e7;
+
+  --shadow-card: 0px 1px 2px 0px rgba(0, 0, 0, 0.4), 0px 0px 0px 1px var(--ring-card);
+  --shadow-control: 0px 1px 2px 0px rgba(0, 0, 0, 0.4), 0px 0px 0px 1px var(--ring-control);
+  --shadow-control-raised: 0px 1px 2px 0px rgba(0, 0, 0, 0.4), 0px 0px 0px 1px var(--ring-control-raised);
+  --shadow-avatar: 0px 1px 2px 0px rgba(0, 0, 0, 0.4), 0px 0px 0px 1px var(--ring-control);
+  --shadow-tooltip: 0px 8px 24px 0px rgba(0, 0, 0, 0.5), 0px 0px 0px 1px var(--sn-ink-650);
+  --shadow-popover: 0px 12px 32px -4px rgba(0, 0, 0, 0.6), 0px 0px 0px 1px var(--ring-card);
+  --shadow-inner-glow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.04);
+  --highlight-edge: transparent;
+}
+
+/* ---------------------------------------------------------------------------
+ * 3. shadcn/ui MAPPING — so every shadcn primitive speaks Statsnap
+ * ------------------------------------------------------------------------ */
+:root,
+.dark {
+  --background: var(--bg-app);
+  --foreground: var(--fg-default);
+  --card: var(--bg-surface);
+  --card-foreground: var(--fg-default);
+  --popover: var(--bg-surface);
+  --popover-foreground: var(--fg-default);
+  --primary: var(--accent-solid);
+  --primary-foreground: #ffffff;
+  --secondary: var(--bg-sunken);
+  --secondary-foreground: var(--fg-default);
+  --muted: var(--bg-hover);
+  --muted-foreground: var(--fg-muted);
+  --accent: var(--bg-hover);
+  --accent-foreground: var(--fg-default);
+  --destructive: var(--fg-negative);
+  --border: var(--border-default);
+  --input: var(--ring-control);
+  --ring: var(--ring-focus);
+  --chart-1: var(--series-income);
+  --chart-2: var(--series-expenses);
+  --chart-3: var(--series-net);
+  --chart-4: var(--fg-positive);
+  --chart-5: var(--fg-negative);
+  --radius: 10px;
+  --sidebar: var(--bg-sunken);
+  --sidebar-foreground: var(--fg-muted);
+  --sidebar-primary: var(--accent-solid);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: var(--bg-nav-active);
+  --sidebar-accent-foreground: var(--fg-accent);
+  --sidebar-border: var(--border-default);
+  --sidebar-ring: var(--ring-focus);
+}
+
+/* ---------------------------------------------------------------------------
+ * 4. TAILWIND THEME
+ * ------------------------------------------------------------------------ */
+@theme inline {
+  /* Fonts (next/font variables set in app/layout.tsx) */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-heading: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-avatar: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  /* Type scale — overrides Tailwind's default size names so tailwind-merge
+     understands them. Every Figma text style uses line-height: 1.
+       text-xs   12px  caption (email)
+       text-sm   14px  body / labels / table / buttons
+       text-base 16px  page + card titles
+       text-lg   18px  brand wordmark
+       text-2xl  24px  KPI + tooltip figures */
+  --text-xs: 12px;
+  --text-xs--line-height: 1;
+  --text-xs--letter-spacing: -0.01em; /* -0.12px */
+  --text-sm: 14px;
+  --text-sm--line-height: 1;
+  --text-sm--letter-spacing: -0.02em; /* -0.28px */
+  --text-base: 16px;
+  --text-base--line-height: 1;
+  --text-base--letter-spacing: -0.02em; /* -0.32px */
+  --text-lg: 18px;
+  --text-lg--line-height: 1;
+  --text-lg--letter-spacing: -0.02em; /* -0.36px */
+  --text-2xl: 24px;
+  --text-2xl--line-height: 1;
+  --text-2xl--letter-spacing: -0.02em; /* -0.48px */
+
+  --tracking-label: -0.015em; /* -0.21px @14 — KPI labels, legend, profile */
+  --tracking-body: -0.02em; /* -0.28px @14 */
+  --leading-axis: 1.2;
+  --leading-card-title: 22px; /* 16px × 1.4, rounded like Figma */
+
+  /* Semantic colours → utilities: bg-surface, text-fg-muted, border-default… */
+  --color-app: var(--bg-app);
+  --color-surface: var(--bg-surface);
+  --color-sunken: var(--bg-sunken);
+  --color-hover: var(--bg-hover);
+  --color-pressed: var(--bg-pressed);
+  --color-nav-hover: var(--bg-nav-hover);
+  --color-nav-active: var(--bg-nav-active);
+  --color-avatar: var(--bg-avatar);
+  --color-tooltip: var(--bg-tooltip);
+
+  --color-fg-strong: var(--fg-strong);
+  --color-fg-numeric: var(--fg-numeric);
+  --color-fg: var(--fg-default);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-fg-placeholder: var(--fg-placeholder);
+  --color-fg-on-tooltip: var(--fg-on-tooltip);
+  --color-fg-on-tooltip-muted: var(--fg-on-tooltip-muted);
+  --color-fg-accent: var(--fg-accent);
+  --color-positive: var(--fg-positive);
+  --color-negative: var(--fg-negative);
+
+  --color-icon: var(--icon-default);
+  --color-icon-hover: var(--icon-hover);
+  --color-icon-accent: var(--icon-accent);
+
+  --color-line: var(--border-default);
+  --color-line-subtle: var(--border-subtle);
+  --color-line-divider: var(--border-divider);
+
+  --color-accent-solid: var(--accent-solid);
+  --color-accent-soft: var(--accent-soft);
+  --color-series-income: var(--series-income);
+  --color-series-expenses: var(--series-expenses);
+  --color-series-net: var(--series-net);
+
+  /* shadcn colour utilities */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Radius scale (Figma: 3 / 8 / 10 / 16 / full) */
+  --radius-chip: 3px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-xl: 12px;
+  --radius-card: 16px;
+  --radius-2xl: 16px;
+  --radius-pill: 100px;
+
+  /* Elevation utilities: shadow-card, shadow-control, … */
+  --shadow-card: var(--shadow-card);
+  --shadow-control: var(--shadow-control);
+  --shadow-control-raised: var(--shadow-control-raised);
+  --shadow-control-pressed: var(--shadow-control-pressed);
+  --shadow-avatar: var(--shadow-avatar);
+  --shadow-tooltip: var(--shadow-tooltip);
+  --shadow-popover: var(--shadow-popover);
+  --shadow-inner-glow: var(--shadow-inner-glow);
+
+  /* Motion utilities: ease-out-strong, duration-press … */
+  --ease-out-strong: var(--ease-out);
+  --ease-in-out-strong: var(--ease-in-out);
+  --ease-drawer: var(--ease-drawer);
+}
+
+/* ---------------------------------------------------------------------------
+ * 5. BASE
+ * ------------------------------------------------------------------------ */
+@layer base {
+  * {
+    @apply border-line outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-app text-fg;
+    /* Figma applies the "salt" stylistic alternates to almost every text layer */
+    font-feature-settings: "salt" 1;
+  }
+  ::selection {
+    background: var(--accent-soft);
+  }
+  /* Keyboard focus — visible ring only for keyboard users */
+  :focus-visible {
+    outline: 2px solid var(--ring-focus);
+    outline-offset: 2px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * 6. COMPONENT PRIMITIVES (small, reusable class recipes)
+ * ------------------------------------------------------------------------ */
+@layer components {
+  /*
+   * Pressable surface. Deliberately NO scale / translate on :active —
+   * per product direction buttons must not "bounce". Press feedback is a
+   * colour + shadow shift that lands in 120ms with a strong ease-out.
+   */
+  .sn-pressable {
+    cursor: pointer;
+    transition-property: background-color, box-shadow, color;
+    transition-duration: var(--duration-press);
+    transition-timing-function: var(--ease-out);
+    -webkit-tap-highlight-color: transparent;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .sn-pressable:hover {
+      background-color: var(--bg-hover);
+    }
+  }
+  .sn-pressable:active {
+    background-color: var(--bg-pressed);
+  }
+
+  /* Single-colour icon from a Figma SVG, tinted with a token */
+  .sn-icon {
+    display: inline-block;
+    flex-shrink: 0;
+    background-color: currentColor;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    -webkit-mask-size: 100% 100%;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * RANGE CALENDAR — continuous selection band behind fixed 36px day cells
+ * ------------------------------------------------------------------------ */
+@layer components {
+  .sn-day.sn-band::before {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    inset-inline: 0;
+    background: var(--accent-soft);
+    pointer-events: none;
+  }
+  .sn-day.sn-band-start::before {
+    inset-inline-start: 50%;
+  }
+  .sn-day.sn-band-end::before {
+    inset-inline-end: 50%;
+  }
+  .sn-day.sn-band-start.sn-band-end::before {
+    display: none;
+  }
+  /* round the band where a week row or month starts/ends */
+  .sn-day.sn-band-mid:first-child::before,
+  .sn-day.sn-band-mid.sn-month-first::before {
+    border-start-start-radius: var(--radius-md);
+    border-end-start-radius: var(--radius-md);
+  }
+  .sn-day.sn-band-mid:last-child::before,
+  .sn-day.sn-band-mid.sn-month-last::before {
+    border-start-end-radius: var(--radius-md);
+    border-end-end-radius: var(--radius-md);
+  }
+  /* hover preview between first and second click is lighter */
+  .sn-day.sn-band-preview::before {
+    background: color-mix(in srgb, var(--accent-soft) 55%, transparent);
+  }
+}
+
+@layer utilities {
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* One-time page-load entrance (rare → allowed to animate). Stagger 40ms. */
+  .sn-enter {
+    animation: sn-enter var(--duration-slow) var(--ease-out) both;
+  }
+}
+
+@keyframes sn-enter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * 7. ACCESSIBILITY — reduced motion keeps fades, drops movement
+ * ------------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0ms !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
