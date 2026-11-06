@@ -224,7 +224,7 @@ Base unit **2px**; the scale actually used is `2 · 4 · 6 · 8 · 10 · 12 · 1
 │   ── 1px full-bleed ──     │   Recent transactions card                    333      │
 │   help                     │                                                        │
 │   …flex…                   │                                                        │
-│   Dark mode 34 · Setting 30│                                                        │
+│   Setting 30               │                                                        │
 ├────────────────────────────┤                                                        │
 │ Profile          68        │                                                        │
 └────────────────────────────┴────────────────────────────────────────────────────────┘
@@ -339,7 +339,6 @@ Based on Emil Kowalski's design-engineering rules.
 | Popovers / menus | medium | 150ms fade + zoom-from-95%, origin-aware |
 | Sidebar collapse (mouse) | low | Width 250ms `ease-out-strong`; labels fade 150ms |
 | Planning group | low | `grid-template-rows 0fr→1fr` + opacity, 200ms — interruptible CSS transition |
-| Dark-mode toggle | low | Thumb `translateX(14px)` 200ms; theme swap itself is instant (`disableTransitionOnChange`) |
 | Page load | once | Cards fade up 4px, 250ms, staggered 40ms |
 
 ### 9.3 Rules
@@ -390,12 +389,9 @@ Inputs: focus = ring turns `accent-solid` + 4px `accent-soft` halo.
 Anatomy of a text button: `[icon 14] 6 [px-2 label]`.
 
 ### Sidebar — `app-sidebar.tsx`
-Brand (logo 24, wordmark `text-lg`, raised collapse button) · Nav rows (h-30, p-8, radius 8, icon 14, gap 8) · full-bleed dividers · Planning group with 30px tree guide · Preferences (Dark mode 34px row with toggle, Setting) · Profile (36px avatar tile, name + email, opens account menu).
+Brand (logo 24, wordmark `text-lg`, raised collapse button) · Nav rows (h-30, p-8, radius 8, icon 14, gap 8) · full-bleed dividers · Planning group with 30px tree guide · Preferences (Setting) · Profile (36px avatar tile, name + email, opens account menu).
 Collapsed: 62px rail. The logo stays (nudged 3px to sit on the icon axis); the wordmark fades; the toggle is a single element that glides from the brand row (214, 16) to just under the logo (16, 78) using `transform` only, while a 38px slot opens above Home (`grid-template-rows 0fr → 1fr`), all 250ms `ease-out-strong` in step with the width. ⌘B does the same instantly. Tooltips on every item.
 Below `lg`: off-canvas drawer, 300ms `--ease-drawer` slide, scrim `--bg-overlay`, `inert` when closed, Esc / scrim / close button to dismiss.
-
-### Theme toggle — `theme-toggle.tsx`
-32 × 18 pill, 0.2px border, horizontal gradient track (`#EBEBEB → #E0E0E0` from 26%), 18px glossy thumb with 3 layered shadows and a blurred highlight. Checked: blue track, thumb +14px.
 
 ### Page header — `page-header.tsx`
 Title · 1×12 divider · subtitle on the left; Search (240px) · divider · Help · Notifications on the right.
@@ -445,14 +441,14 @@ shadcn (Base UI) primitives restyled: radius 12, `shadow-popover`, origin-aware 
 
 ## 13. Dark mode
 
-Not in the Figma frame — designed as a system extension by re-mapping semantic tokens only (`.dark` in `globals.css`):
+**Not exposed in the UI.** The Figma frame's "Dark mode" row was removed by product decision and the app is locked to light (`forcedTheme="light"` in `components/providers.tsx`, which also overrides any theme saved earlier). The dark tokens below are kept in `globals.css` so the theme can be re-enabled later without redesign work.
+
+Designed as a system extension by re-mapping semantic tokens only (`.dark` in `globals.css`):
 
 - Zinc-tinted ink ramp (`#0B0B0D` app → `#111114` surface → `#16161A` hover).
 - Rings stay 1px; drop shadows deepen; white inner edges/glows are removed.
 - Accent text lightens to `#5B96FF` for contrast; positive/negative lighten one step.
 - Chart grid drops to 12% opacity; series colours unchanged.
-- Toggle track turns brand blue when on.
-- Default theme is **light** (system preference is ignored) so the first paint matches Figma.
 
 ---
 
@@ -495,7 +491,7 @@ Not in the Figma frame — designed as a system extension by re-mapping semantic
 | `1:3` | Finance Dashboard — Redesign | `components/dashboard/dashboard.tsx` |
 | `1:5` | Sidebar | `app-sidebar.tsx` |
 | `1:6` | Brand | `app-sidebar.tsx` (Brand) |
-| `1:110` | Toggle | `theme-toggle.tsx` |
+| `1:105`–`1:110` | Dark mode row + toggle | removed (see §13) |
 | `1:117` | Profile | `app-sidebar.tsx` (Profile) |
 | `1:125` | Header | `page-header.tsx` |
 | `1:145` | Actions (date range / download) | `report-toolbar.tsx` |

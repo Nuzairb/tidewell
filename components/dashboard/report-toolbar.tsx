@@ -143,6 +143,6 @@ function downloadCsv(rows: Transaction[], range: Range) {
   a.click()
   URL.revokeObjectURL(url)
   toast.success("Report downloaded", {
-    description: `${rows.length} transaction${rows.length === 1 ? "" : "s"} exported as CSV (generated in your browser).`,
+    description: `${rows.length} transaction${rows.length === 1 ? "" : "s"} exported as CSV.`,
   })
 }

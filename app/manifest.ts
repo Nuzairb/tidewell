@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Statsnap — Reports",
     short_name: "Statsnap",
-    description: "Track your finances and spending habits. Design prototype — no backend.",
+    description: "Track your finances and spending habits.",
     start_url: "/",
     display: "standalone",
     background_color: "#FFFFFF",

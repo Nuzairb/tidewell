@@ -8,7 +8,7 @@
 A pixel-perfect, working front-end implementation of the **Statsnap "Finance Dashboard — Redesign"** Figma frame
 (node `1:3`, 1440 × 1024), built with **Next.js 16 (App Router)**, **shadcn/ui (Base UI)** and **Tailwind CSS v4**.
 
-Only the **Reports** screen exists. Navigation items for other screens show a small toast explaining they aren't part of the prototype.
+Only the **Reports** screen exists. Navigation items for other screens show a short "coming soon" toast.
 
 ---
 
@@ -33,7 +33,6 @@ Other scripts: `pnpm build` · `pnpm start` · `pnpm lint`
 | Area | Behaviour |
 | --- | --- |
 | **Sidebar** | Collapse/expand (button or <kbd>⌘B</kbd> / <kbd>Ctrl B</kbd>). Collapsed, the logo stays and the toggle glides down beneath it. Tooltips on the rail, Planning group expands/collapses, profile menu. Below 1024px it becomes a slide-in drawer |
-| **Dark mode** | The sidebar toggle switches a complete dark theme (designed extension — Figma only shows light) |
 | **Search** | Filters the transactions table by name, category or payment method. <kbd>/</kbd> focuses it, <kbd>Esc</kbd> clears it |
 | **Date range** | Presets + range calendar (two months on desktop, one on phones). Press-and-drag to select, **drag either end** to adjust, or click start then end. Filters the transactions table and the CSV export |
 | **Download** | Generates a real CSV of the currently filtered transactions — entirely in the browser |
@@ -95,7 +94,6 @@ components/
     kpi-cards.tsx        ← Figma 1:159
     cash-flow-card.tsx   ← Figma 1:213 (interactive chart)
     transactions-card.tsx← Figma 1:286
-    theme-toggle.tsx     ← Figma 1:110 skeuomorphic switch
   ui/range-calendar.tsx  ← drag-to-select range calendar (built on react-day-picker)
   icon.tsx               ← mask-tinted Figma icon
   ui/                    ← shadcn/ui components, re-skinned with Statsnap tokens

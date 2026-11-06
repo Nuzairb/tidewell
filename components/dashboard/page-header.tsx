@@ -143,10 +143,7 @@ export function PageHeader({
               <TooltipContent side="bottom">Help</TooltipContent>
             </Tooltip>
             <PopoverContent align="end" sideOffset={8} className="w-72 gap-3 p-3">
-              <div className="flex flex-col gap-1.5">
-                <p className="text-sm font-semibold text-fg">Keyboard shortcuts</p>
-                <p className="text-xs font-medium text-fg-muted">This is a design prototype — no backend.</p>
-              </div>
+              <p className="text-sm font-semibold text-fg">Keyboard shortcuts</p>
               <ul className="flex flex-col gap-2">
                 {SHORTCUTS.map((s) => (
                   <li key={s.label} className="flex items-center justify-between gap-3">
