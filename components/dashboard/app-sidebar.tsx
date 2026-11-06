@@ -1,8 +1,6 @@
 "use client"
 
 import { useState, type ReactNode } from "react"
-import { useTheme } from "next-themes"
-import { toast } from "sonner"
 import { cn } from "@/lib/utils"
 import { Icon } from "@/components/icon"
 import { Button } from "@/components/ui/button"
@@ -16,7 +14,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { ThemeToggle } from "@/components/dashboard/theme-toggle"
 import { ACTIVE_PAGE, PRIMARY_NAV, SECONDARY_NAV, USER, type NavLink } from "@/lib/data"
 import { notInPrototype } from "@/lib/prototype"
 
@@ -34,8 +31,6 @@ type SidebarProps = {
 /** Figma node 1:5 — 260px rail, #FAFAFA, right border #E7E7E9. */
 export function AppSidebar({ collapsed, instant, isDesktop, mobileOpen, onToggle, onCloseMobile }: SidebarProps) {
   const [planningOpen, setPlanningOpen] = useState(true)
-  const { resolvedTheme, setTheme } = useTheme()
-  const isDark = resolvedTheme === "dark"
 
   return (
     <aside
@@ -218,34 +213,8 @@ export function AppSidebar({ collapsed, instant, isDesktop, mobileOpen, onToggle
             </ul>
           </div>
 
-          {/* Preferences — 1:105 */}
+          {/* Preferences — 1:105 (dark-mode row removed by request) */}
           <div className="flex shrink-0 flex-col gap-0.5">
-            <SidebarTooltip label="Dark mode" enabled={collapsed}>
-              <div
-                className={cn(
-                  "flex h-[34px] w-full cursor-pointer items-center gap-2.5 overflow-hidden rounded-md p-2 sn-nav-row",
-                  "transition-colors duration-(--duration-press) ease-out-strong [@media(hover:hover)]:hover:bg-nav-hover"
-                )}
-                onClick={(e) => {
-                  // clicking anywhere on the row flips the switch (the switch handles its own clicks)
-                  if ((e.target as HTMLElement).closest("[role=switch]")) return
-                  setTheme(isDark ? "light" : "dark")
-                }}
-              >
-                <Icon name="moon-02" />
-                <span
-                  id="dark-mode-label"
-                  className="min-w-0 flex-1 truncate text-sm font-medium text-fg-muted transition-opacity duration-(--duration-fast) group-data-collapsed/sidebar:opacity-0"
-                >
-                  Dark mode
-                </span>
-                <ThemeToggle
-                  aria-labelledby="dark-mode-label"
-                  checked={isDark}
-                  onCheckedChange={(v) => setTheme(v ? "dark" : "light")}
-                />
-              </div>
-            </SidebarTooltip>
             <SidebarTooltip label="Setting" enabled={collapsed}>
               <Button
                 variant="ghost"
@@ -295,9 +264,7 @@ export function AppSidebar({ collapsed, instant, isDesktop, mobileOpen, onToggle
             <DropdownMenuItem onClick={() => notInPrototype("Settings")}>Settings</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              onClick={() =>
-                toast("Signed out (not really)", { description: "Authentication isn't wired up in this prototype." })
-              }
+              onClick={() => notInPrototype("Sign out")}
             >
               Sign out
             </DropdownMenuItem>
