@@ -65,7 +65,9 @@ Title `Reports · Statsnap` (template `%s · Statsnap`), description, Open Graph
 - [`app/opengraph-image.tsx`](app/opengraph-image.tsx) / [`twitter-image.tsx`](app/twitter-image.tsx) — 1200×630 card: full logo (mark + Geist SemiBold wordmark) on white
 - [`app/manifest.ts`](app/manifest.ts)
 
-Pages are marked `noindex` because this is a prototype. Set `VERCEL_PROJECT_PRODUCTION_URL` (automatic on Vercel) so social cards resolve to absolute URLs.
+Pages are marked `noindex` because this is a prototype.
+
+**Social card URLs** ([`lib/site-url.ts`](lib/site-url.ts)): production builds point `og:image` at **https://statsnap-kargul.vercel.app**. Vercel previews use their own deployment URL, and `next dev` uses localhost (link-preview crawlers can't reach localhost, so test previews on a deployed URL). To move to a custom domain, set `NEXT_PUBLIC_SITE_URL` (see [`.env.example`](.env.example)). Don't rely on `VERCEL_PROJECT_PRODUCTION_URL` here: on this project it resolves to `statsnap-eight.vercel.app`, which 404s.
 
 ## Fidelity notes
 

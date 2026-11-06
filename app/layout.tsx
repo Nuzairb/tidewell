@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next"
 import { Geist, Geist_Mono, Inter } from "next/font/google"
 import { Providers } from "@/components/providers"
+import { getSiteUrl } from "@/lib/site-url"
 import "./globals.css"
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] })
@@ -10,16 +11,13 @@ const inter = Inter({ variable: "--font-inter", subsets: ["latin"], weight: ["60
 
 const description = "Track your finances and spending habits — income, expenses and net cashflow at a glance."
 
-const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
-  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-  : "http://localhost:3000"
-
 /*
  * Icons are file-based (app/icon.svg, app/apple-icon.tsx), as are the social
  * cards (app/opengraph-image.tsx, app/twitter-image.tsx) and app/manifest.ts.
  */
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  // Absolute base for og:image / twitter:image / og:url — see lib/site-url.ts
+  metadataBase: getSiteUrl(),
   title: {
     default: "Reports · Statsnap",
     template: "%s · Statsnap",
