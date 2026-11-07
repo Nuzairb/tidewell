@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react"
 import { DayPicker, type DayButtonProps } from "react-day-picker"
-import { endOfMonth, isAfter, isBefore, isSameDay, startOfDay } from "date-fns"
+import { addDays, isAfter, isBefore, isSameDay, isSameMonth, startOfDay } from "date-fns"
 import { cn } from "@/lib/utils"
 import { Icon } from "@/components/icon"
 
@@ -133,6 +133,21 @@ export function RangeCalendar({
   const preview = pending && from && hover && !isSameDay(hover, from) ? ordered(from, hover) : null
   const band = from && to ? { from, to } : preview
 
+  /*
+   * The selection band is drawn as ONE shape: a cell's corner is rounded only
+   * when there is no band beside it AND none above/below it in the same month
+   * grid. Rounding every week row separately left notches between stacked rows.
+   */
+  const inBand = (d: Date) => !!band && !isBefore(d, band.from) && !isAfter(d, band.to)
+  const neighbourInBand = (d: Date, days: number) => {
+    const n = addDays(d, days)
+    return isSameMonth(n, d) && inBand(n)
+  }
+  const hasLeft = (d: Date) => d.getDay() !== 0 && neighbourInBand(d, -1)
+  const hasRight = (d: Date) => d.getDay() !== 6 && neighbourInBand(d, 1)
+  const hasUp = (d: Date) => neighbourInBand(d, -7)
+  const hasDown = (d: Date) => neighbourInBand(d, 7)
+
   const modifiers = {
       r_start: (d: Date) => !!band && isSameDay(d, band.from),
       r_end: (d: Date) => !!band && isSameDay(d, band.to),
@@ -141,8 +156,10 @@ export function RangeCalendar({
       r_preview: () => !!preview,
       r_endpoint: (d: Date) =>
         (!!from && isSameDay(d, from)) || (!!to && isSameDay(d, to)) || (!!preview && isSameDay(d, preview.to)),
-      month_first: (d: Date) => d.getDate() === 1,
-      month_last: (d: Date) => isSameDay(d, endOfMonth(d)),
+      corner_tl: (d: Date) => inBand(d) && !hasLeft(d) && !hasUp(d),
+      corner_tr: (d: Date) => inBand(d) && !hasRight(d) && !hasUp(d),
+      corner_bl: (d: Date) => inBand(d) && !hasLeft(d) && !hasDown(d),
+      corner_br: (d: Date) => inBand(d) && !hasRight(d) && !hasDown(d),
   }
 
   return (
@@ -168,8 +185,10 @@ export function RangeCalendar({
           r_start: "sn-band sn-band-start",
           r_end: "sn-band sn-band-end",
           r_preview: "sn-band-preview",
-          month_first: "sn-month-first",
-          month_last: "sn-month-last",
+          corner_tl: "sn-corner-tl",
+          corner_tr: "sn-corner-tr",
+          corner_bl: "sn-corner-bl",
+          corner_br: "sn-corner-br",
         }}
         classNames={{
           root: "relative w-fit",

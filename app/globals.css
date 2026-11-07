@@ -492,15 +492,21 @@
   .sn-day.sn-band-start.sn-band-end::before {
     display: none;
   }
-  /* round the band where a week row or month starts/ends */
-  .sn-day.sn-band-mid:first-child::before,
-  .sn-day.sn-band-mid.sn-month-first::before {
+  /*
+   * Round only the OUTER corners of the whole selection shape (computed per day
+   * in range-calendar.tsx). Seams between stacked week rows stay square, so the
+   * band reads as one block instead of notched strips.
+   */
+  .sn-day.sn-band.sn-corner-tl::before {
     border-start-start-radius: var(--radius-md);
+  }
+  .sn-day.sn-band.sn-corner-tr::before {
+    border-start-end-radius: var(--radius-md);
+  }
+  .sn-day.sn-band.sn-corner-bl::before {
     border-end-start-radius: var(--radius-md);
   }
-  .sn-day.sn-band-mid:last-child::before,
-  .sn-day.sn-band-mid.sn-month-last::before {
-    border-start-end-radius: var(--radius-md);
+  .sn-day.sn-band.sn-corner-br::before {
     border-end-end-radius: var(--radius-md);
   }
   /* hover preview between first and second click is lighter */

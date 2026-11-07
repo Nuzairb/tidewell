@@ -412,7 +412,7 @@ Built on react-day-picker, but selection is Statsnap's own:
 - **Drag to select**: press a day and drag. **Either end of an existing range is a handle**: press the start or end (solid blue, with a grip tick) and drag; crossing the other end swaps them.
 - **Click-click** still works: first click sets the start, the band previews on hover (lighter tint), the second click sets the end.
 - Keyboard: arrows move focus (react-day-picker), Enter/Space selects.
-- Band: `--accent-soft` behind the cells, half-cell caps at the endpoints, rounded where a week row or month starts/ends. Endpoints: `bg-accent-solid`, white text, radius 8.
+- Band: `--accent-soft` behind the cells, half-cell caps at the endpoints, drawn as one shape: only its outer corners are rounded (a corner rounds when there is no selected day beside it and none above/below it), so stacked week rows join with straight edges instead of notches. Endpoints: `bg-accent-solid`, white text, radius 8.
 - No animation while dragging (direct manipulation); only hover colours fade (120ms).
 
 ### Popovers, menus, tooltips — `components/ui/*`
