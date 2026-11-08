@@ -3,26 +3,33 @@
 import { Switch as SwitchPrimitive } from "@base-ui/react/switch"
 import { cn } from "@/lib/utils"
 
-function Switch({
-  className,
-  size = "default",
-  ...props
-}: SwitchPrimitive.Root.Props & {
-  size?: "sm" | "default"
-}) {
+/**
+ * shadcn Switch, re-skinned with the Figma toggle tokens (DESIGN_SYSTEM §6–7):
+ * gradient track + raised thumb when off, solid accent when on.
+ * Thumb slides 200ms `ease-out-strong`; the hit area extends past the 32×18 track.
+ */
+function Switch({ className, ...props }: SwitchPrimitive.Root.Props) {
   return (
     <SwitchPrimitive.Root
       data-slot="switch"
-      data-size={size}
       className={cn(
-        "peer group/switch relative inline-flex shrink-0 items-center rounded-full border border-transparent transition-all outline-none group-has-[:focus-visible]/field-label:border-transparent group-has-[:focus-visible]/field-label:ring-0 after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 data-[size=default]:h-[18.4px] data-[size=default]:w-[32px] data-[size=sm]:h-[14px] data-[size=sm]:w-[24px] dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-checked:bg-primary data-unchecked:bg-input dark:data-unchecked:bg-input/80 data-disabled:cursor-not-allowed data-disabled:opacity-50",
+        "peer relative inline-flex h-[18px] w-8 shrink-0 cursor-pointer items-center rounded-pill border p-px outline-none",
+        "after:absolute after:-inset-x-2 after:-inset-y-2.5",
+        "transition-[background-color,border-color] duration-(--duration-base) ease-out-strong",
+        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-focus)",
+        "data-unchecked:border-(--toggle-track-border) data-unchecked:bg-linear-to-b data-unchecked:from-(--toggle-track-from) data-unchecked:to-(--toggle-track-to) data-unchecked:shadow-(--shadow-toggle)",
+        "data-checked:border-transparent data-checked:bg-accent-solid",
+        "data-disabled:cursor-not-allowed data-disabled:opacity-50",
         className
       )}
       {...props}
     >
       <SwitchPrimitive.Thumb
         data-slot="switch-thumb"
-        className="pointer-events-none block rounded-full bg-background ring-0 transition-transform group-data-[size=default]/switch:size-4 group-data-[size=sm]/switch:size-3 group-data-[size=default]/switch:data-checked:translate-x-[calc(100%-2px)] group-data-[size=sm]/switch:data-checked:translate-x-[calc(100%-2px)] dark:data-checked:bg-primary-foreground group-data-[size=default]/switch:data-unchecked:translate-x-0 group-data-[size=sm]/switch:data-unchecked:translate-x-0 dark:data-unchecked:bg-foreground"
+        className={cn(
+          "pointer-events-none block size-3.5 rounded-full bg-linear-to-b from-(--toggle-thumb-from) to-(--toggle-thumb-to) shadow-(--shadow-toggle-thumb)",
+          "transition-transform duration-(--duration-base) ease-out-strong data-checked:translate-x-3.5"
+        )}
       />
     </SwitchPrimitive.Root>
   )

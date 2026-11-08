@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { Icon } from "@/components/icon"
 import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
@@ -7,11 +8,11 @@ import { KPIS, type Kpi } from "@/lib/data"
 import { notInPrototype } from "@/lib/prototype"
 import { cn } from "@/lib/utils"
 
-/** Figma node 1:159 — four equal cards, 16px gap. */
-export function KpiCards() {
+/** Figma node 1:159 — four equal cards, 16px gap. Defaults to the Reports figures. */
+export function KpiCards({ items = KPIS, label = "Summary" }: { items?: Kpi[]; label?: string }) {
   return (
-    <section aria-label="Summary" className="grid w-full grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
-      {KPIS.map((kpi, i) => (
+    <section aria-label={label} className="grid w-full grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
+      {items.map((kpi, i) => (
         <KpiCard key={kpi.id} kpi={kpi} index={i} />
       ))}
     </section>
@@ -31,11 +32,16 @@ function KpiCard({ kpi, index }: { kpi: Kpi; index: number }) {
           <Tooltip>
             <TooltipTrigger
               render={
-                <Button
-                  size="icon-sm"
-                  aria-label={`Open ${kpi.action}`}
-                  onClick={() => notInPrototype(kpi.action)}
-                />
+                kpi.href ? (
+                  <Button
+                    size="icon-sm"
+                    aria-label={`Open ${kpi.action}`}
+                    nativeButton={false}
+                    render={<Link href={kpi.href} />}
+                  />
+                ) : (
+                  <Button size="icon-sm" aria-label={`Open ${kpi.action}`} onClick={() => notInPrototype(kpi.action)} />
+                )
               }
             >
               <Icon name={kpi.icon} />

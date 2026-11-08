@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   // Absolute base for og:image / twitter:image / og:url — see lib/site-url.ts
   metadataBase: getSiteUrl(),
   title: {
-    default: "Reports · Tidewell",
+    default: "Tidewell",
     template: "%s · Tidewell",
   },
   description,
@@ -32,14 +32,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "Tidewell",
-    title: "Tidewell — Reports",
+    title: "Tidewell",
     description,
     url: "/",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Tidewell — Reports",
+    title: "Tidewell",
     description,
   },
   appleWebApp: { title: "Tidewell", statusBarStyle: "default" },

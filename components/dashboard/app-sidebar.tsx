@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, type ReactNode } from "react"
+import Link from "next/link"
+import { usePathname, useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Icon } from "@/components/icon"
 import { Button } from "@/components/ui/button"
@@ -14,7 +16,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { ACTIVE_PAGE, PRIMARY_NAV, SECONDARY_NAV, USER, type NavLink } from "@/lib/data"
+import { HELP_NAV, PRIMARY_NAV, SECONDARY_NAV, SETTINGS_NAV, USER, type NavLink } from "@/lib/data"
 import { notInPrototype } from "@/lib/prototype"
 
 type SidebarProps = {
@@ -31,6 +33,13 @@ type SidebarProps = {
 /** Figma node 1:5 — 260px rail, #FAFAFA, right border #E7E7E9. */
 export function AppSidebar({ collapsed, instant, isDesktop, mobileOpen, onToggle, onCloseMobile }: SidebarProps) {
   const [planningOpen, setPlanningOpen] = useState(true)
+  const pathname = usePathname()
+  const router = useRouter()
+
+  const openSettings = (section: string) => {
+    onCloseMobile()
+    router.push(`/settings${section}`)
+  }
 
   return (
     <aside
@@ -143,7 +152,12 @@ export function AppSidebar({ collapsed, instant, isDesktop, mobileOpen, onToggle
               <ul className="flex flex-col gap-0.5">
                 {PRIMARY_NAV.map((item) => (
                   <li key={item.id}>
-                    <NavItem item={item} collapsed={collapsed} active={item.id === ACTIVE_PAGE} />
+                    <NavItem
+                      item={item}
+                      collapsed={collapsed}
+                      active={item.href === pathname}
+                      onNavigate={onCloseMobile}
+                    />
                   </li>
                 ))}
               </ul>
@@ -155,15 +169,26 @@ export function AppSidebar({ collapsed, instant, isDesktop, mobileOpen, onToggle
               {SECONDARY_NAV.map((group) => {
                 const hasChildren = !!group.children?.length
                 const open = group.id === "planning" ? planningOpen : false
+                if (!hasChildren) {
+                  return (
+                    <li key={group.id}>
+                      <NavItem
+                        item={group}
+                        collapsed={collapsed}
+                        active={group.href === pathname}
+                        onNavigate={onCloseMobile}
+                      />
+                    </li>
+                  )
+                }
                 return (
                   <li key={group.id}>
                     <NavItem
                       item={group}
                       collapsed={collapsed}
                       trailing={<Icon name="chevron-down" />}
-                      aria-expanded={hasChildren ? open && !collapsed : undefined}
+                      aria-expanded={open && !collapsed}
                       onClick={() => {
-                        if (!hasChildren) return notInPrototype(group.label)
                         if (collapsed) {
                           onToggle()
                           setPlanningOpen(true)
@@ -172,30 +197,33 @@ export function AppSidebar({ collapsed, instant, isDesktop, mobileOpen, onToggle
                         setPlanningOpen((v) => !v)
                       }}
                     />
-                    {hasChildren && (
-                      <Collapsible open={open && !collapsed}>
-                        <div className="flex pt-0.5">
-                          {/* tree guide — Figma asset 1:54, 30×126 */}
-                          <div className="relative w-[30px] shrink-0 self-stretch">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                              src="/figma/nav-tree-lines.svg"
-                              alt=""
-                              width={30}
-                              height={126}
-                              className="absolute inset-0 block size-full max-w-none dark:opacity-20"
-                            />
-                          </div>
-                          <ul className="flex min-w-0 flex-1 flex-col gap-0.5">
-                            {group.children!.map((child) => (
-                              <li key={child.id}>
-                                <NavItem item={child} collapsed={collapsed} />
-                              </li>
-                            ))}
-                          </ul>
+                    <Collapsible open={open && !collapsed}>
+                      <div className="flex pt-0.5">
+                        {/* tree guide — Figma asset 1:54, 30×126 */}
+                        <div className="relative w-[30px] shrink-0 self-stretch">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src="/figma/nav-tree-lines.svg"
+                            alt=""
+                            width={30}
+                            height={126}
+                            className="absolute inset-0 block size-full max-w-none dark:opacity-20"
+                          />
                         </div>
-                      </Collapsible>
-                    )}
+                        <ul className="flex min-w-0 flex-1 flex-col gap-0.5">
+                          {group.children!.map((child) => (
+                            <li key={child.id}>
+                              <NavItem
+                                item={child}
+                                collapsed={collapsed}
+                                active={child.href === pathname}
+                                onNavigate={onCloseMobile}
+                              />
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </Collapsible>
                   </li>
                 )
               })}
@@ -206,8 +234,10 @@ export function AppSidebar({ collapsed, instant, isDesktop, mobileOpen, onToggle
             <ul className="flex flex-col">
               <li>
                 <NavItem
-                  item={{ id: "help", label: "Help & Support", icon: "message-question-square" }}
+                  item={HELP_NAV}
                   collapsed={collapsed}
+                  active={HELP_NAV.href === pathname}
+                  onNavigate={onCloseMobile}
                 />
               </li>
             </ul>
@@ -215,18 +245,12 @@ export function AppSidebar({ collapsed, instant, isDesktop, mobileOpen, onToggle
 
           {/* Preferences — 1:105 (dark-mode row removed by request) */}
           <div className="flex shrink-0 flex-col gap-0.5">
-            <SidebarTooltip label="Setting" enabled={collapsed}>
-              <Button
-                variant="ghost"
-                className="h-[30px] w-full justify-start gap-2.5 overflow-hidden rounded-md p-2"
-                onClick={() => notInPrototype("Settings")}
-              >
-                <Icon name="settings-01" />
-                <span className="min-w-0 flex-1 truncate text-left text-sm font-medium text-fg-muted transition-opacity duration-(--duration-fast) group-data-collapsed/sidebar:opacity-0">
-                  Setting
-                </span>
-              </Button>
-            </SidebarTooltip>
+            <NavItem
+              item={SETTINGS_NAV}
+              collapsed={collapsed}
+              active={SETTINGS_NAV.href === pathname}
+              onNavigate={onCloseMobile}
+            />
           </div>
         </div>
       </nav>
@@ -259,9 +283,9 @@ export function AppSidebar({ collapsed, instant, isDesktop, mobileOpen, onToggle
               <DropdownMenuLabel className="text-xs text-fg-muted">{USER.email}</DropdownMenuLabel>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => notInPrototype("Profile")}>Profile</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => notInPrototype("Billing")}>Billing</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => notInPrototype("Settings")}>Settings</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => openSettings("#profile")}>Profile</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => openSettings("#billing")}>Billing</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => openSettings("")}>Settings</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => notInPrototype("Sign out")}
@@ -281,6 +305,7 @@ function NavItem({
   collapsed,
   trailing,
   onClick,
+  onNavigate,
   ...rest
 }: {
   item: NavLink
@@ -288,37 +313,51 @@ function NavItem({
   collapsed: boolean
   trailing?: ReactNode
   onClick?: () => void
+  /** closes the drawer after following a link (< lg) */
+  onNavigate?: () => void
   "aria-expanded"?: boolean
 }) {
+  const className = cn(
+    "flex h-[30px] w-full cursor-pointer items-center gap-2 overflow-hidden rounded-md p-2 text-left outline-none",
+    "transition-colors duration-(--duration-press) ease-out-strong",
+    "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring-focus)",
+    active
+      ? "bg-nav-active"
+      : "[@media(hover:hover)]:hover:bg-nav-hover active:bg-nav-hover [@media(hover:hover)]:hover:[&_[data-icon]]:text-icon-hover [@media(hover:hover)]:hover:[&_.nav-label]:text-fg"
+  )
+  const content = (
+    <>
+      <Icon name={item.icon} className={active ? "text-icon-accent" : undefined} />
+      <span className="flex min-w-0 flex-1 items-center px-[2px] transition-opacity duration-(--duration-fast) group-data-collapsed/sidebar:opacity-0">
+        <span
+          className={cn(
+            "nav-label truncate text-sm font-medium transition-colors duration-(--duration-press)",
+            active ? "text-fg-accent" : "text-fg-muted"
+          )}
+        >
+          {item.label}
+        </span>
+      </span>
+      {trailing}
+    </>
+  )
+
   return (
     <SidebarTooltip label={item.label} enabled={collapsed}>
-      <button
-        type="button"
-        aria-current={active ? "page" : undefined}
-        onClick={onClick ?? (() => (active ? undefined : notInPrototype(item.label)))}
-        className={cn(
-          "flex h-[30px] w-full cursor-pointer items-center gap-2 overflow-hidden rounded-md p-2 text-left outline-none",
-          "transition-colors duration-(--duration-press) ease-out-strong",
-          "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring-focus)",
-          active
-            ? "bg-nav-active"
-            : "[@media(hover:hover)]:hover:bg-nav-hover active:bg-nav-hover [@media(hover:hover)]:hover:[&_[data-icon]]:text-icon-hover [@media(hover:hover)]:hover:[&_.nav-label]:text-fg"
-        )}
-        {...rest}
-      >
-        <Icon name={item.icon} className={active ? "text-icon-accent" : undefined} />
-        <span className="flex min-w-0 flex-1 items-center px-[2px] transition-opacity duration-(--duration-fast) group-data-collapsed/sidebar:opacity-0">
-          <span
-            className={cn(
-              "nav-label truncate text-sm font-medium transition-colors duration-(--duration-press)",
-              active ? "text-fg-accent" : "text-fg-muted"
-            )}
-          >
-            {item.label}
-          </span>
-        </span>
-        {trailing}
-      </button>
+      {item.href ? (
+        <Link href={item.href} aria-current={active ? "page" : undefined} onClick={onNavigate} className={className}>
+          {content}
+        </Link>
+      ) : (
+        <button
+          type="button"
+          onClick={onClick ?? (() => notInPrototype(item.label))}
+          className={className}
+          {...rest}
+        >
+          {content}
+        </button>
+      )}
     </SidebarTooltip>
   )
 }

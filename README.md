@@ -1,14 +1,16 @@
-# Tidewell — Reports (design prototype)
+# Tidewell (design prototype)
 
 > [!IMPORTANT]
 > **This is a design prototype only.** It has **no backend, no database, no API, no authentication and no real money data.**
-> Every number, transaction and notification is static mock data in [`lib/data.ts`](lib/data.ts) or comes from the Figma chart export.
+> Every number, transaction and notification is static mock data in [`lib/data/`](lib/data) or comes from the Figma chart export.
 > Nothing you do in the UI is saved — reload the page and it's back to the original state.
 
 A pixel-perfect, working front-end implementation of the **Tidewell "Finance Dashboard — Redesign"** Figma frame
 (node `1:3`, 1440 × 1024), built with **Next.js 16 (App Router)**, **shadcn/ui (Base UI)** and **Tailwind CSS v4**.
 
-Only the **Reports** screen exists. Navigation items for other screens show a short "coming soon" toast.
+Every sidebar item is a working screen: Home `/`, Accounts, Transactions, Cashflow, Reports, Budget, Recurring, Goals, Investments, Analytics, Tracking, Data, Help & Support (`/help`) and Settings (`/settings`). Actions inside a screen that would need a backend (linking an account, trading, payments) show a short "coming soon" toast.
+
+**One source per number.** Money figures are derived, not retyped: account balances add up to net worth; Cashflow's monthly lines (`lib/data/cashflow.ts`) feed Analytics, Budget history and Home's month card and total the Reports KPIs; Recurring takes its October charges from `UPCOMING`. Change a figure in one data file and every screen follows.
 
 ---
 
@@ -57,7 +59,7 @@ The main scroll area reserves its scrollbar gutter (`scrollbar-gutter: stable`),
 
 ## Metadata
 
-Title `Reports · Tidewell` (template `%s · Tidewell`), description, Open Graph + Twitter cards, web manifest and theme colour, all in [`app/layout.tsx`](app/layout.tsx). File-based icons:
+Titles `Home · Tidewell` / `Accounts · Tidewell` / `Reports · Tidewell` (template `%s · Tidewell`), description, Open Graph + Twitter cards, web manifest and theme colour, all in [`app/layout.tsx`](app/layout.tsx). File-based icons:
 
 - [`app/icon.svg`](app/icon.svg) — favicon (the Figma logo mark)
 - [`app/apple-icon.tsx`](app/apple-icon.tsx) — 180×180 home-screen icon
@@ -84,21 +86,39 @@ Pages are marked `noindex` because this is a prototype.
 app/
   globals.css            ← the design system: primitives → semantic tokens → shadcn map → Tailwind theme
   layout.tsx             ← fonts (Geist, Geist Mono, Inter) + providers
-  page.tsx               ← renders <Dashboard />
+  (app)/layout.tsx       ← shared <AppShell> (sidebar state survives navigation)
+  (app)/page.tsx         ← Home
+  (app)/<screen>/page.tsx← one route per screen (metadata title + <ScreenView />)
 components/
   dashboard/
-    dashboard.tsx        ← page shell + state (sidebar, search, date range, table expansion)
+    app-shell.tsx        ← sidebar + drawer + main column, ⌘B; <PageContent> scroll area
+    reports-view.tsx     ← Reports state (search, date range, table expansion)
+    section-card.tsx     ← card frame (title row + body) used by Home and Accounts
+    card-action.tsx      ← "View all ›" title-row control (link or coming-soon toast)
     app-sidebar.tsx      ← Figma 1:5
     page-header.tsx      ← Figma 1:125
     report-toolbar.tsx   ← Figma 1:145 (date range + Download)
     kpi-cards.tsx        ← Figma 1:159
     cash-flow-card.tsx   ← Figma 1:213 (interactive chart)
-    transactions-card.tsx← Figma 1:286
+    transactions-card.tsx← Figma 1:286 (also used on Home)
+  home/
+    home-view.tsx        ← Home layout + search
+    accounts-card.tsx, month-card.tsx, budgets-card.tsx, upcoming-card.tsx, goals-card.tsx
+  accounts/
+    accounts-view.tsx    ← summary KPIs + list/detail + the selected account's activity
+    account-list.tsx     ← grouped, selectable accounts with subtotals
+    account-detail.tsx   ← balance, 6-month chart, credit use, key facts
+    account-summary.tsx  ← row content shared with Home's Accounts card
+    balance-chart.tsx    ← static month-end balance line
+  transactions/, cashflow/, budget/, recurring/, goals/, investments/,
+  analytics/, tracking/, data-center/, help/, settings/
+                         ← one folder per screen: <area>-view.tsx + its cards
+  ui/meter.tsx           ← budget / goal progress bar
   ui/range-calendar.tsx  ← drag-to-select range calendar (built on react-day-picker)
   icon.tsx               ← mask-tinted Figma icon
   ui/                    ← shadcn/ui components, re-skinned with Tidewell tokens
 lib/
-  data.ts                ← ALL mock data
+  data/                  ← ALL mock data, one file per area (index.ts re-exports the shared ones)
   use-media-query.ts     ← SSR-safe breakpoint hook
   brand-image.tsx        ← shared logo/font for generated icons + OG card
   chart.ts               ← chart geometry + reading the Figma line export for hover
@@ -111,7 +131,7 @@ DESIGN_SYSTEM.md         ← full token + component documentation
 
 ## Turning this into a real product
 
-1. Replace `lib/data.ts` with server data (Route Handlers / Server Components).
+1. Replace `lib/data/` with server data (Route Handlers / Server Components).
 2. Render the chart from data (e.g. Recharts via `shadcn add chart`) instead of the static SVG — the scales in `lib/chart.ts` already describe the axes.
 3. Wire the date range into the KPI and chart queries.
 4. Add real routes for the sidebar items and real auth for the profile menu.

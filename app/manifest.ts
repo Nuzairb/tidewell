@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next"
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Tidewell — Reports",
+    name: "Tidewell",
     short_name: "Tidewell",
     description: "Track your finances and spending habits.",
     start_url: "/",

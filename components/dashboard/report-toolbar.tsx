@@ -1,5 +1,7 @@
 "use client"
 
+import { format } from "date-fns"
+
 import { useState } from "react"
 import { toast } from "sonner"
 import { cn } from "@/lib/utils"
@@ -137,7 +139,8 @@ function downloadCsv(rows: Transaction[], range: Range) {
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8" })
   const url = URL.createObjectURL(blob)
   const a = document.createElement("a")
-  const iso = (d: Date) => d.toISOString().slice(0, 10)
+  // local date — toISOString() would shift to the previous day east of UTC
+  const iso = (d: Date) => format(d, "yyyy-MM-dd")
   a.href = url
   a.download = `tidewell-report_${iso(range.from)}_${iso(range.to)}.csv`
   a.click()

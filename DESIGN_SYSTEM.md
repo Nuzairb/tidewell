@@ -138,6 +138,7 @@ Rules:
 
 - Text on white must be `fg-muted` or darker for body copy (`#757575` = 4.6:1 on white). `fg-subtle` (`#999`) is only for column headers and timestamps, never for content.
 - **Money sign colour:** incoming amounts use `text-positive` with a `+`. Outgoing amounts stay `text-fg` with a true minus `−` (U+2212) — red is reserved for *bad trend*, not for every expense.
+- **Progress is blue, pressure is red.** Meters fill with `accent-solid` while progressing toward a target (goals, month budget) and switch to `negative` once a budget category reaches 85% (`BUDGET_WARNING`).
 - **Trend sentiment ≠ direction.** "Expenses +4.7%" is an *up* arrow coloured *negative*. Model both (`trend`, `sentiment` in `lib/data.ts`).
 
 ---
@@ -405,6 +406,52 @@ See [§12](#12-data-visualisation).
 ### Transactions table — `transactions-card.tsx`
 shadcn `Table`, `border-separate` with cell borders (so heights are exact). Header row `bg-sunken`, `fg-subtle`. Vertical cell borders `border-line`, none on the last column. Amount right-aligned, `tabular-nums`.
 
+### Meter — `components/ui/meter.tsx`
+6px pill, track `bg-pressed`, fill `accent-solid` or `negative` (see §3.3). `role="meter"` with a label and 0–100 value. Static: no fill animation.
+
+### Home cards — `components/home/*`
+Built from the same parts as Reports: `SectionCard` (`components/dashboard/section-card.tsx`) = 62px title row (card title + optional `CardAction`, the "View all ›" control) above a body. Lists use the table's row grammar: `border-line` rules, 45px label/value rows, 60px two-line rows (`text-sm` primary over `text-xs` muted), amounts right-aligned with `tabular-nums`.
+
+| Card | Content |
+| --- | --- |
+| Accounts | Total balance (KPI recipe) + month change; one row per account with an initials tile (avatar recipe) |
+| Month | Spent so far (KPI recipe) + Meter; Income / Spent / Saved / Savings rate rows |
+| Budgets | Five closest-to-limit categories (fixed costs excluded), spent / limit + Meter |
+| Upcoming | Next recurring charges with a 36px date tile (`shadow-control`), "Due in <month>" total footer on `bg-sunken` |
+| Goals | Percent, Meter, saved of target, due date |
+
+Layout: `xl` 2 + 1 then 1 + 1 + 1 columns; `md` budgets and upcoming side by side, goals full width; phones stack. Cards stagger in 40ms apart.
+
+### Accounts — `components/accounts/*`
+- **Summary:** `KpiCards` with account figures (net worth, cash, investments, credit card debt). Debt going up is an *up* arrow coloured *negative*, per §3.3.
+- **All accounts:** groups (Cash, Investments, Credit) with a 36px `bg-sunken` header row carrying the label (`fg-subtle`) and subtotal. Rows are buttons (`aria-pressed`); the selected one uses `bg-nav-active`, like the current nav item.
+- **Detail:** KPI recipe for the balance (cards show *balance owed* as a positive number, and its change as the change in what's owed), institution + tile, `BalanceChart`, a credit-used Meter for cards (negative from 30%), and a 2 × 2 grid of 45px fact rows.
+- **BalanceChart:** six month-end points, same marks as Cash Flow (1.5px `--series-income` line, dashed `--border-subtle` grid, current month label `fg-accent` semibold), soft `--accent-soft` area. Static, no scrubber; the end dot is HTML so it stays round while the SVG stretches.
+- Layout: `lg` list 5fr / detail 7fr; below `lg` they stack and selecting an account scrolls its detail into view.
+
+### Shared building blocks
+- `SectionCard` + `CardAction` frame every card on the new screens; `CardAction` links when the screen exists (`href`) and toasts otherwise (`feature`).
+- `KpiCards` takes `items` (each screen's own four figures); `href` on a `Kpi` turns its icon button into a link.
+- `TransactionsCard` takes a `title` ("Account activity", "Tagged transactions", "Portfolio activity").
+- `PageHeader` takes `searchLabel` so the field says what it filters on each screen.
+- `Input` and `Switch` are re-skinned: Input = 30px ring control with the header-search focus halo (red ring when `aria-invalid`); Switch = the Figma toggle tokens (gradient track + raised thumb off, accent on, 200ms thumb).
+- Segmented controls (Transactions type, Budget month) are `bg-sunken` tracks with a raised white selected segment.
+
+### Screens (system extensions, no Figma frames)
+| Screen | What it is built from |
+| --- | --- |
+| Transactions | ReportToolbar, segmented type filter, account/category DropdownMenus, summary strip, month-grouped ledger table. Internal transfers and contributions are listed but excluded from money in/out |
+| Cashflow | KPI averages, the Cash Flow card, monthly table (totals = Reports KPIs), income-source and category share cards |
+| Budget | Month switcher, summary + Meter, insights, editable category table (Housing is fixed). "Spent in budgets" excludes unbudgeted spend (e.g. travel) |
+| Recurring | Four summary tiles, October calendar (days selectable), grouped list with "Remind me" switches |
+| Goals | KPI row, goal list/detail, contribution slider recomputing the projected finish |
+| Investments | KPIs, value chart, allocation bars (series tokens, max 4), holdings table, portfolio activity |
+| Analytics | KPIs, monthly and weekday column charts, category shares, merchants table, derived insights |
+| Tracking | Tag list/detail with budget Meter and tagged transactions |
+| Data | Connections with working "Sync now", CSV/JSON export, import dropzone, privacy switches |
+| Help & Support | Topic cards filtering an accordion FAQ, contact card, shortcuts |
+| Settings | Sticky section nav, five anchored sections (`#profile` … `#billing`), save bar on change |
+
 ### Range calendar — `components/ui/range-calendar.tsx`
 Built on react-day-picker, but selection is Tidewell's own:
 
@@ -488,7 +535,7 @@ Designed as a system extension by re-mapping semantic tokens only (`.dark` in `g
 
 | Figma node | Name | Code |
 | --- | --- | --- |
-| `1:3` | Finance Dashboard — Redesign | `components/dashboard/dashboard.tsx` |
+| `1:3` | Finance Dashboard — Redesign | `app-shell.tsx` + `reports-view.tsx` |
 | `1:5` | Sidebar | `app-sidebar.tsx` |
 | `1:6` | Brand | `app-sidebar.tsx` (Brand) |
 | `1:105`–`1:110` | Dark mode row + toggle | removed (see §13) |
@@ -499,3 +546,6 @@ Designed as a system extension by re-mapping semantic tokens only (`.dark` in `g
 | `1:213` | Card / Cash flow | `cash-flow-card.tsx` |
 | `1:261` | Tooltip | `cash-flow-card.tsx` (tooltip) |
 | `1:286` | Card / Recent transactions | `transactions-card.tsx` |
+| — | Home (system extension, no Figma frame) | `components/home/home-view.tsx` |
+| — | Accounts (system extension, no Figma frame) | `components/accounts/accounts-view.tsx` |
+| — | Every other screen (system extensions) | `components/<screen>/<screen>-view.tsx` |

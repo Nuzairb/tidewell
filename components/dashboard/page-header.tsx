@@ -7,18 +7,25 @@ import { Icon } from "@/components/icon"
 import { Button } from "@/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import { useShell } from "@/components/dashboard/app-shell"
 import { NOTIFICATIONS, SHORTCUTS } from "@/lib/data"
 
 /** Figma node 1:125 — 62px header, white, bottom border #E7E7E7. */
 export function PageHeader({
+  title,
+  subtitle,
   query,
   onQueryChange,
-  onOpenMenu,
+  searchLabel = "Search transactions",
 }: {
+  title: string
+  subtitle: string
   query: string
   onQueryChange: (q: string) => void
-  onOpenMenu: () => void
+  /** what the search filters on this page, for screen readers */
+  searchLabel?: string
 }) {
+  const { openMenu } = useShell()
   const inputRef = useRef<HTMLInputElement>(null)
   // < md the search field lives behind an icon and expands over the header
   const [mobileSearch, setMobileSearch] = useState(false)
@@ -47,7 +54,7 @@ export function PageHeader({
             size="icon"
             className="lg:hidden"
             aria-label="Open menu"
-            onClick={onOpenMenu}
+            onClick={openMenu}
           >
             <Icon name="align-left-01" className="-scale-x-100" />
           </Button>
@@ -55,10 +62,10 @@ export function PageHeader({
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/figma/logo.svg" alt="Tidewell" width={24} height={24} className="size-6 shrink-0 lg:hidden" />
           <span aria-hidden className="h-3 w-px shrink-0 bg-line lg:hidden" />
-          <h1 className="text-base font-semibold whitespace-nowrap text-fg-strong">Reports</h1>
+          <h1 className="text-base font-semibold whitespace-nowrap text-fg-strong">{title}</h1>
           <span aria-hidden className="hidden h-3 w-px shrink-0 bg-line md:block" />
           <p className="hidden truncate text-sm font-medium text-fg-muted md:block">
-            Track your finances and spending habits.
+            {subtitle}
           </p>
         </div>
 
@@ -67,7 +74,7 @@ export function PageHeader({
           <Button
             size="icon"
             className="md:hidden"
-            aria-label="Search transactions"
+            aria-label={searchLabel}
             aria-expanded={mobileSearch}
             onClick={() => {
               // render the field first, then focus it inside the same tap so iOS opens the keyboard
@@ -113,7 +120,7 @@ export function PageHeader({
                   }
                 }}
                 placeholder="Search..."
-                aria-label="Search transactions"
+                aria-label={searchLabel}
                 // 16px on phones stops iOS Safari from zooming into the field
                 className="w-full min-w-0 bg-transparent text-base leading-none font-medium tracking-normal text-fg outline-none placeholder:text-fg-placeholder md:text-sm [&::-webkit-search-cancel-button]:hidden"
               />

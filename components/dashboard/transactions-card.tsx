@@ -17,12 +17,14 @@ const COLS = [
 
 /** Figma node 1:286 — Recent transactions. */
 export function TransactionsCard({
+  title = "Recent transactions",
   rows,
   expanded,
   onToggleExpanded,
   query,
   hiddenCount,
 }: {
+  title?: string
   rows: Transaction[]
   expanded: boolean
   onToggleExpanded: () => void
@@ -40,7 +42,7 @@ export function TransactionsCard({
           id="transactions-title"
           className="flex min-w-0 flex-col gap-1 text-base leading-[22px] font-semibold text-fg sm:flex-row sm:items-baseline sm:gap-2"
         >
-          <span className="whitespace-nowrap">Recent transactions</span>
+          <span className="whitespace-nowrap">{title}</span>
           {query && (
             <span className="truncate text-sm font-medium text-fg-muted">
               <span className="hidden sm:inline">· </span>
