@@ -26,7 +26,7 @@ const ordered = (a: Date, b: Date): Required<DateRangeValue> =>
   isBefore(b, a) ? { from: b, to: a } : { from: a, to: b }
 
 /**
- * Statsnap range calendar.
+ * Tidewell range calendar.
  *
  * - Fixed 36px cells → every row is identical (no fractional flex widths).
  * - Press-and-drag across days to create a range.

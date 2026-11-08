@@ -139,7 +139,7 @@ function downloadCsv(rows: Transaction[], range: Range) {
   const a = document.createElement("a")
   const iso = (d: Date) => d.toISOString().slice(0, 10)
   a.href = url
-  a.download = `statsnap-report_${iso(range.from)}_${iso(range.to)}.csv`
+  a.download = `tidewell-report_${iso(range.from)}_${iso(range.to)}.csv`
   a.click()
   URL.revokeObjectURL(url)
   toast.success("Report downloaded", {

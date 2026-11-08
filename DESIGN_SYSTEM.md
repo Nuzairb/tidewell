@@ -1,4 +1,4 @@
-# Statsnap Design System
+# Tidewell Design System
 
 Version 1.0 · Source: Figma **"Finance Dashboard — Redesign"** (`driFVyRYgjygKahpLUEw2Z`, node `1:3`)
 Implementation: [`app/globals.css`](app/globals.css) (tokens) · [`components/ui`](components/ui) (shadcn primitives) · [`components/dashboard`](components/dashboard) (product components)
@@ -163,7 +163,7 @@ All Figma text uses **line-height 1** (100%) and negative tracking.
 | `text-xs` | 12px | 1 | −0.01em (−0.12px) | 500 | Profile email |
 | `text-sm` | 14px | 1 | −0.02em (−0.28px) | 400 / 500 / 600 | Nav, labels, table, buttons, axis, tooltip rows |
 | `text-base` | 16px | 1 (`leading-[22px]` for card titles) | −0.02em (−0.32px) | 600 | Page title, card titles |
-| `text-lg` | 18px | 1 | −0.02em (−0.36px) | 600 | Wordmark "Statsnap" |
+| `text-lg` | 18px | 1 | −0.02em (−0.36px) | 600 | Wordmark "Tidewell" |
 | `text-2xl` | 24px | 1 | −0.02em (−0.48px) | 600 | KPI values (mono), tooltip net figure (sans) |
 
 Extra tracking/leading tokens:
@@ -406,7 +406,7 @@ See [§12](#12-data-visualisation).
 shadcn `Table`, `border-separate` with cell borders (so heights are exact). Header row `bg-sunken`, `fg-subtle`. Vertical cell borders `border-line`, none on the last column. Amount right-aligned, `tabular-nums`.
 
 ### Range calendar — `components/ui/range-calendar.tsx`
-Built on react-day-picker, but selection is Statsnap's own:
+Built on react-day-picker, but selection is Tidewell's own:
 
 - **Fixed 36px cells** (`border-separate`, no flex-fraction widths), so every row is the same height.
 - **Drag to select**: press a day and drag. **Either end of an existing range is a handle**: press the start or end (solid blue, with a grip tick) and drag; crossing the other end swaps them.

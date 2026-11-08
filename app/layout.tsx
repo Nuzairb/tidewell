@@ -19,11 +19,11 @@ export const metadata: Metadata = {
   // Absolute base for og:image / twitter:image / og:url — see lib/site-url.ts
   metadataBase: getSiteUrl(),
   title: {
-    default: "Reports · Statsnap",
-    template: "%s · Statsnap",
+    default: "Reports · Tidewell",
+    template: "%s · Tidewell",
   },
   description,
-  applicationName: "Statsnap",
+  applicationName: "Tidewell",
   keywords: ["finance dashboard", "cashflow", "budgeting", "expenses", "income", "reports"],
   authors: [{ name: "Kargul Studio" }],
   creator: "Kargul Studio",
@@ -31,18 +31,18 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
   openGraph: {
     type: "website",
-    siteName: "Statsnap",
-    title: "Statsnap — Reports",
+    siteName: "Tidewell",
+    title: "Tidewell — Reports",
     description,
     url: "/",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Statsnap — Reports",
+    title: "Tidewell — Reports",
     description,
   },
-  appleWebApp: { title: "Statsnap", statusBarStyle: "default" },
+  appleWebApp: { title: "Tidewell", statusBarStyle: "default" },
   formatDetection: { telephone: false, email: false, address: false },
 }
 

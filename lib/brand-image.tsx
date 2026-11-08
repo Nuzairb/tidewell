@@ -16,13 +16,13 @@ export const GEIST_SEMIBOLD = await readFile(
 )
 
 export const BRAND = {
-  name: "Statsnap",
+  name: "Tidewell",
   ink: "#09090B", // --sn-neutral-950 (wordmark colour)
   blue: "#1067FF", // --sn-blue-500
   paper: "#FFFFFF",
 } as const
 
-/** The full lockup: logo mark + "Statsnap" wordmark, centred on white. */
+/** The full lockup: logo mark + "Tidewell" wordmark, centred on white. */
 export function Lockup({ mark, text, gap }: { mark: number; text: number; gap: number }) {
   return (
     <div

@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 /**
- * shadcn Button, re-skinned with Statsnap tokens.
+ * shadcn Button, re-skinned with Tidewell tokens.
  *
  * Product rule: buttons NEVER bounce — no scale, no translate on :active.
  * Press feedback = background + shadow shift (120ms, strong ease-out).

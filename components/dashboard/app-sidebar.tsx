@@ -58,7 +58,7 @@ export function AppSidebar({ collapsed, instant, isDesktop, mobileOpen, onToggle
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/figma/logo.svg"
-            alt="Statsnap"
+            alt="Tidewell"
             width={24}
             height={24}
             className={cn(
@@ -76,7 +76,7 @@ export function AppSidebar({ collapsed, instant, isDesktop, mobileOpen, onToggle
               "group-data-instant/sidebar:transition-none"
             )}
           >
-            Statsnap
+            Tidewell
           </span>
           {/* reserves the toggle's slot in the expanded row */}
           <span aria-hidden className="w-[30px] shrink-0" />

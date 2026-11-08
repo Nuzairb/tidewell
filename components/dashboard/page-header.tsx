@@ -53,7 +53,7 @@ export function PageHeader({
           </Button>
           {/* The sidebar (and its logo) is a hidden drawer below lg, so the brand mark lives here */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/figma/logo.svg" alt="Statsnap" width={24} height={24} className="size-6 shrink-0 lg:hidden" />
+          <img src="/figma/logo.svg" alt="Tidewell" width={24} height={24} className="size-6 shrink-0 lg:hidden" />
           <span aria-hidden className="h-3 w-px shrink-0 bg-line lg:hidden" />
           <h1 className="text-base font-semibold whitespace-nowrap text-fg-strong">Reports</h1>
           <span aria-hidden className="hidden h-3 w-px shrink-0 bg-line md:block" />

@@ -4,7 +4,7 @@
 
 /*
  * ============================================================================
- *  STATSNAP DESIGN SYSTEM — TOKENS
+ *  TIDEWELL DESIGN SYSTEM — TOKENS
  *  Source of truth: Figma "Finance Dashboard — Redesign" (node 1:3)
  *  Full documentation lives in /DESIGN_SYSTEM.md
  *
@@ -232,7 +232,7 @@
 }
 
 /* ---------------------------------------------------------------------------
- * 3. shadcn/ui MAPPING — so every shadcn primitive speaks Statsnap
+ * 3. shadcn/ui MAPPING — so every shadcn primitive speaks Tidewell
  * ------------------------------------------------------------------------ */
 :root,
 .dark {

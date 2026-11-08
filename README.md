@@ -1,11 +1,11 @@
-# Statsnap — Reports (design prototype)
+# Tidewell — Reports (design prototype)
 
 > [!IMPORTANT]
 > **This is a design prototype only.** It has **no backend, no database, no API, no authentication and no real money data.**
 > Every number, transaction and notification is static mock data in [`lib/data.ts`](lib/data.ts) or comes from the Figma chart export.
 > Nothing you do in the UI is saved — reload the page and it's back to the original state.
 
-A pixel-perfect, working front-end implementation of the **Statsnap "Finance Dashboard — Redesign"** Figma frame
+A pixel-perfect, working front-end implementation of the **Tidewell "Finance Dashboard — Redesign"** Figma frame
 (node `1:3`, 1440 × 1024), built with **Next.js 16 (App Router)**, **shadcn/ui (Base UI)** and **Tailwind CSS v4**.
 
 Only the **Reports** screen exists. Navigation items for other screens show a short "coming soon" toast.
@@ -57,7 +57,7 @@ The main scroll area reserves its scrollbar gutter (`scrollbar-gutter: stable`),
 
 ## Metadata
 
-Title `Reports · Statsnap` (template `%s · Statsnap`), description, Open Graph + Twitter cards, web manifest and theme colour, all in [`app/layout.tsx`](app/layout.tsx). File-based icons:
+Title `Reports · Tidewell` (template `%s · Tidewell`), description, Open Graph + Twitter cards, web manifest and theme colour, all in [`app/layout.tsx`](app/layout.tsx). File-based icons:
 
 - [`app/icon.svg`](app/icon.svg) — favicon (the Figma logo mark)
 - [`app/apple-icon.tsx`](app/apple-icon.tsx) — 180×180 home-screen icon
@@ -96,7 +96,7 @@ components/
     transactions-card.tsx← Figma 1:286
   ui/range-calendar.tsx  ← drag-to-select range calendar (built on react-day-picker)
   icon.tsx               ← mask-tinted Figma icon
-  ui/                    ← shadcn/ui components, re-skinned with Statsnap tokens
+  ui/                    ← shadcn/ui components, re-skinned with Tidewell tokens
 lib/
   data.ts                ← ALL mock data
   use-media-query.ts     ← SSR-safe breakpoint hook
