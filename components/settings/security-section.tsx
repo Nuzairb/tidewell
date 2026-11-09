@@ -102,7 +102,7 @@ function SessionRow({ session, onSignOut }: { session: Session; onSignOut: () =>
     <li className="flex h-[60px] items-center gap-3 border-b border-line px-4 last:border-b-0">
       <span
         aria-hidden
-        className="flex size-9 shrink-0 items-center justify-center rounded-md bg-surface shadow-control"
+        className="flex size-9 shrink-0 items-center justify-center rounded-md bg-control shadow-control"
       >
         <Icon name="monitor-04" className={current ? "text-icon-accent" : undefined} />
       </span>

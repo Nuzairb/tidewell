@@ -46,7 +46,7 @@ export function LedgerFilters({
       <div
         role="group"
         aria-label="Transaction type"
-        className="flex h-[30px] items-center gap-0.5 rounded-lg bg-surface p-0.5 shadow-control"
+        className="flex h-[30px] items-center gap-0.5 rounded-lg bg-control p-0.5 shadow-control"
       >
         {TYPES.map((t) => {
           const selected = filters.type === t.value

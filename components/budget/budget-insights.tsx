@@ -103,7 +103,7 @@ export function BudgetInsights({ months, className }: { months: BudgetMonth[]; c
           <li key={id} className="flex gap-3 border-b border-line px-4 py-3.5 last:border-b-0">
             <span
               aria-hidden
-              className="flex size-[26px] shrink-0 items-center justify-center rounded-md bg-surface shadow-control"
+              className="flex size-[26px] shrink-0 items-center justify-center rounded-md bg-control shadow-control"
             >
               <Icon name={icon} />
             </span>

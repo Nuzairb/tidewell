@@ -54,7 +54,7 @@ export function BillingSection({
         <div className="flex h-[60px] items-center gap-3 border-t border-line px-4">
           <span
             aria-hidden
-            className="flex size-9 shrink-0 items-center justify-center rounded-md bg-surface shadow-control"
+            className="flex size-9 shrink-0 items-center justify-center rounded-md bg-control shadow-control"
           >
             <Icon name="credit-card-down" />
           </span>

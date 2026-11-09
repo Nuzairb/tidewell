@@ -115,7 +115,7 @@ function SeriesRow({
     >
       <span
         aria-hidden
-        className="flex size-9 shrink-0 flex-col items-center justify-center gap-0.5 rounded-md bg-surface shadow-control"
+        className="flex size-9 shrink-0 flex-col items-center justify-center gap-0.5 rounded-md bg-control shadow-control"
       >
         <span className="text-sm leading-none font-semibold text-fg tabular-nums">{date.getDate()}</span>
         <span className="text-xs leading-none font-medium text-fg-muted">{monthShort.format(date)}</span>

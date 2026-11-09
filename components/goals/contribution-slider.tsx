@@ -51,7 +51,7 @@ export function ContributionSlider({
               getAriaLabel={() => "Monthly contribution"}
               getAriaValueText={(_, v) => `${formatUsdWhole(v)} a month`}
               className={cn(
-                "size-4 rounded-full bg-surface shadow-control outline-none",
+                "size-4 rounded-full bg-control shadow-control outline-none",
                 "has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-(--ring-focus)"
               )}
             />

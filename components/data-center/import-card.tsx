@@ -37,7 +37,7 @@ export function ImportCard({ className }: { className?: string }) {
               : "border-line bg-sunken [@media(hover:hover)]:hover:bg-hover"
           )}
         >
-          <span aria-hidden className="flex size-9 items-center justify-center rounded-md bg-surface shadow-control">
+          <span aria-hidden className="flex size-9 items-center justify-center rounded-md bg-control shadow-control">
             <Icon name="file-03" className={isDragging ? "text-icon-accent" : undefined} />
           </span>
           <span className="text-sm font-medium text-fg">Drop a CSV or OFX file</span>

@@ -1,8 +1,9 @@
 "use client"
 
-import { useState, type ReactNode } from "react"
+import { useState, useSyncExternalStore, type ReactNode } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
+import { useTheme } from "next-themes"
 import { cn } from "@/lib/utils"
 import { Icon } from "@/components/icon"
 import { Button } from "@/components/ui/button"
@@ -16,6 +17,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { ThemeToggle } from "@/components/dashboard/theme-toggle"
 import { HELP_NAV, PRIMARY_NAV, SECONDARY_NAV, SETTINGS_NAV, USER, type NavLink } from "@/lib/data"
 import { notInPrototype } from "@/lib/prototype"
 
@@ -243,8 +245,9 @@ export function AppSidebar({ collapsed, instant, isDesktop, mobileOpen, onToggle
             </ul>
           </div>
 
-          {/* Preferences — 1:105 (dark-mode row removed by request) */}
+          {/* Preferences — 1:105 */}
           <div className="flex shrink-0 flex-col gap-0.5">
+            <DarkModeRow collapsed={collapsed} />
             <NavItem
               item={SETTINGS_NAV}
               collapsed={collapsed}
@@ -358,6 +361,52 @@ function NavItem({
           {content}
         </button>
       )}
+    </SidebarTooltip>
+  )
+}
+
+const noopSubscribe = () => () => {}
+
+/** Figma 1:105–1:110 — the whole row flips the theme; the switch handles its own clicks. */
+function DarkModeRow({ collapsed }: { collapsed: boolean }) {
+  const { resolvedTheme, setTheme } = useTheme()
+  // The server can't know the saved theme; read it only once hydrated.
+  const isHydrated = useSyncExternalStore(
+    noopSubscribe,
+    () => true,
+    () => false
+  )
+  const isDark = isHydrated && resolvedTheme === "dark"
+
+  return (
+    <SidebarTooltip label="Dark mode" enabled={collapsed}>
+      <div
+        className={cn(
+          "flex h-[30px] w-full cursor-pointer items-center gap-2 overflow-hidden rounded-md p-2",
+          "transition-colors duration-(--duration-press) ease-out-strong",
+          "[@media(hover:hover)]:hover:bg-nav-hover [@media(hover:hover)]:hover:[&_[data-icon]]:text-icon-hover [@media(hover:hover)]:hover:[&_.nav-label]:text-fg"
+        )}
+        onClick={(e) => {
+          if ((e.target as HTMLElement).closest("[role=switch]")) return
+          setTheme(isDark ? "light" : "dark")
+        }}
+      >
+        <Icon name="moon-02" />
+        <span className="flex min-w-0 flex-1 items-center px-[2px] transition-opacity duration-(--duration-fast) group-data-collapsed/sidebar:opacity-0">
+          <span
+            id="dark-mode-label"
+            className="nav-label truncate text-sm font-medium text-fg-muted transition-colors duration-(--duration-press)"
+          >
+            Dark mode
+          </span>
+        </span>
+        <ThemeToggle
+          aria-labelledby="dark-mode-label"
+          checked={isDark}
+          onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
+          className="transition-opacity duration-(--duration-fast) group-data-collapsed/sidebar:opacity-0"
+        />
+      </div>
     </SidebarTooltip>
   )
 }

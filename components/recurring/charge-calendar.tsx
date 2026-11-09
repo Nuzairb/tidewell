@@ -156,7 +156,7 @@ function Day({
         "focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-(--ring-focus)",
         selected
           ? "bg-accent-soft text-fg-accent"
-          : "bg-surface text-fg shadow-control [@media(hover:hover)]:hover:bg-hover"
+          : "bg-control text-fg shadow-control [@media(hover:hover)]:hover:bg-hover"
       )}
     >
       {day}

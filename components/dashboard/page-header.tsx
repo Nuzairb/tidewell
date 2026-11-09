@@ -99,9 +99,9 @@ export function PageHeader({
           >
           <label
             className={cn(
-              "flex h-[30px] w-full cursor-text items-center gap-1 overflow-hidden rounded-lg bg-surface p-2 shadow-control md:w-60",
+              "flex h-[30px] w-full cursor-text items-center gap-1 overflow-hidden rounded-lg bg-control p-2 shadow-control md:w-60",
               "transition-[box-shadow,background-color] duration-(--duration-fast) ease-out-strong",
-              "[@media(hover:hover)]:hover:bg-hover focus-within:bg-surface focus-within:shadow-[0_1px_2px_0_rgba(40,40,40,0.08),0_0_0_1px_var(--accent-solid),0_0_0_4px_var(--accent-soft)]"
+              "[@media(hover:hover)]:hover:bg-hover focus-within:bg-control focus-within:shadow-[0_1px_2px_0_rgba(40,40,40,0.08),0_0_0_1px_var(--accent-solid),0_0_0_4px_var(--accent-soft)]"
             )}
           >
             <Icon name="search-lg" />

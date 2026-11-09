@@ -488,14 +488,14 @@ shadcn (Base UI) primitives restyled: radius 12, `shadow-popover`, origin-aware 
 
 ## 13. Dark mode
 
-**Not exposed in the UI.** The Figma frame's "Dark mode" row was removed by product decision and the app is locked to light (`forcedTheme="light"` in `components/providers.tsx`, which also overrides any theme saved earlier). The dark tokens below are kept in `globals.css` so the theme can be re-enabled later without redesign work.
+**Toggled from the sidebar.** The "Dark mode" row (Figma `1:105`–`1:110`) sits above Settings; clicking the row or its switch (`components/dashboard/theme-toggle.tsx`) flips the theme. The app opens in light (`defaultTheme="light"` in `components/providers.tsx`) and `next-themes` remembers the choice.
 
-Designed as a system extension by re-mapping semantic tokens only (`.dark` in `globals.css`):
+Uses the Waggle dark style, re-mapped through semantic tokens only (`.dark` in `globals.css`):
 
-- Zinc-tinted ink ramp (`#0B0B0D` app → `#111114` surface → `#16161A` hover).
-- Rings stay 1px; drop shadows deepen; white inner edges/glows are removed.
-- Accent text lightens to `#5B96FF` for contrast; positive/negative lighten one step.
-- Chart grid drops to 12% opacity; series colours unchanged.
+- Ink ladder: sidebar `#0C0C0F` → page `#111114` → card `#141417` → control `#1B1B20` (`bg-control`, which equals `bg-surface` in light) → hover `#1F1F25`.
+- Edges are black rings (12%) plus a 4% white top highlight and inner ring; raised controls get a solid black ring. Dividers are 40% black grooves.
+- Text is translucent white: strong `#FCFDFF`, default 90%, muted 60%, subtle/placeholder 40%; icons 40% → 70% on hover.
+- Tidewell's blue accent, positive/negative colours, chart series and blue toggle are kept. Chart grid drops to 12% opacity.
 
 ---
 
@@ -538,7 +538,7 @@ Designed as a system extension by re-mapping semantic tokens only (`.dark` in `g
 | `1:3` | Finance Dashboard — Redesign | `app-shell.tsx` + `reports-view.tsx` |
 | `1:5` | Sidebar | `app-sidebar.tsx` |
 | `1:6` | Brand | `app-sidebar.tsx` (Brand) |
-| `1:105`–`1:110` | Dark mode row + toggle | removed (see §13) |
+| `1:105`–`1:110` | Dark mode row + toggle | `app-sidebar.tsx` (DarkModeRow) + `theme-toggle.tsx` |
 | `1:117` | Profile | `app-sidebar.tsx` (Profile) |
 | `1:125` | Header | `page-header.tsx` |
 | `1:145` | Actions (date range / download) | `report-toolbar.tsx` |

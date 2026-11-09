@@ -35,7 +35,7 @@ export function TopicCards({
               >
                 <span
                   aria-hidden
-                  className="flex size-9 shrink-0 items-center justify-center rounded-md bg-surface shadow-control"
+                  className="flex size-9 shrink-0 items-center justify-center rounded-md bg-control shadow-control"
                 >
                   <Icon name={topic.icon} className={selected ? "text-icon-accent" : undefined} />
                 </span>

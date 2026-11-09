@@ -40,7 +40,7 @@ export function MonthSwitcher({
               "focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-(--ring-focus)",
               "disabled:cursor-not-allowed",
               selected
-                ? "bg-surface font-semibold text-fg-accent shadow-control"
+                ? "bg-control font-semibold text-fg-accent shadow-control"
                 : "text-fg-muted [@media(hover:hover)]:hover:text-fg"
             )}
           >

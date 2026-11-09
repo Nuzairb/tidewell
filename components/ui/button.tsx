@@ -24,7 +24,7 @@ const buttonVariants = cva(
       variant: {
         /** White control with 1px ring — header buttons, search, "View all", card icons */
         control: [
-          "bg-surface text-fg-muted shadow-control",
+          "bg-control text-fg-muted shadow-control",
           "[@media(hover:hover)]:hover:bg-hover [@media(hover:hover)]:hover:text-fg",
           "[@media(hover:hover)]:hover:[&_[data-icon]]:text-icon-hover",
           "active:bg-pressed active:shadow-control-pressed",
@@ -32,7 +32,7 @@ const buttonVariants = cva(
         ].join(" "),
         /** Raised control with inner white edge + glow — date range, sidebar toggle */
         raised: [
-          "bg-surface text-fg-muted shadow-control-raised",
+          "bg-control text-fg-muted shadow-control-raised",
           "border border-(--highlight-edge)",
           "after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:shadow-inner-glow",
           "[@media(hover:hover)]:hover:bg-hover [@media(hover:hover)]:hover:[&_[data-icon]]:text-icon-hover",
@@ -48,7 +48,7 @@ const buttonVariants = cva(
         /** shadcn defaults kept for completeness (popovers, calendar) */
         default: "bg-primary text-primary-foreground [@media(hover:hover)]:hover:bg-primary/90 active:bg-primary/85",
         outline:
-          "bg-surface text-fg shadow-control [@media(hover:hover)]:hover:bg-hover active:bg-pressed",
+          "bg-control text-fg shadow-control [@media(hover:hover)]:hover:bg-hover active:bg-pressed",
         secondary: "bg-secondary text-secondary-foreground [@media(hover:hover)]:hover:bg-hover active:bg-pressed",
         destructive: "bg-negative/10 text-negative [@media(hover:hover)]:hover:bg-negative/15",
         link: "text-fg-accent underline-offset-4 [@media(hover:hover)]:hover:underline",

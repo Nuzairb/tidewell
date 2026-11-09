@@ -76,7 +76,8 @@
 
   /* Surfaces */
   --bg-app: var(--sn-neutral-0); /* page background */
-  --bg-surface: var(--sn-neutral-0); /* cards, header, controls */
+  --bg-surface: var(--sn-neutral-0); /* cards, header */
+  --bg-control: var(--bg-surface); /* buttons, inputs */
   --bg-sunken: var(--sn-neutral-25); /* sidebar, table header */
   --bg-hover: var(--sn-neutral-25); /* row / control hover */
   --bg-pressed: var(--sn-neutral-50); /* control :active */
@@ -172,39 +173,43 @@
 .dark {
   color-scheme: dark;
 
-  --bg-app: var(--sn-ink-950);
-  --bg-surface: var(--sn-ink-900);
-  --bg-sunken: var(--sn-ink-950);
-  --bg-hover: var(--sn-ink-850);
-  --bg-pressed: var(--sn-ink-800);
+  /* Surfaces — Waggle's dark ladder: page #0C0C0F, panel #111114, card #141417, control #1B1B20 */
+  --bg-app: #111114;
+  --bg-surface: #141417;
+  --bg-control: #1b1b20;
+  --bg-sunken: #0c0c0f;
+  --bg-hover: #1f1f25;
+  --bg-pressed: #18181c;
   --bg-nav-hover: rgba(255, 255, 255, 0.04);
   --bg-nav-active: rgba(16, 103, 255, 0.18);
   --bg-avatar: rgba(16, 103, 255, 0.14);
-  --bg-tooltip: var(--sn-ink-800);
-  --bg-overlay: rgba(0, 0, 0, 0.6);
+  --bg-tooltip: #1f1f25;
+  --bg-overlay: rgba(0, 0, 0, 0.55);
 
-  --fg-strong: var(--sn-ink-50);
-  --fg-numeric: var(--sn-ink-50);
-  --fg-default: var(--sn-ink-100);
-  --fg-muted: var(--sn-ink-400);
-  --fg-subtle: var(--sn-ink-500);
-  --fg-placeholder: var(--sn-ink-500);
-  --fg-on-tooltip: var(--sn-ink-50);
-  --fg-on-tooltip-muted: var(--sn-ink-300);
+  /* Foreground — translucent white levels */
+  --fg-strong: #fcfdff;
+  --fg-numeric: #fcfdff;
+  --fg-default: rgba(252, 253, 255, 0.9);
+  --fg-muted: rgba(252, 253, 255, 0.6);
+  --fg-subtle: rgba(252, 253, 255, 0.4);
+  --fg-placeholder: rgba(252, 253, 255, 0.4);
+  --fg-on-tooltip: #fcfdff;
+  --fg-on-tooltip-muted: rgba(252, 253, 255, 0.6);
   --fg-accent: var(--sn-blue-300);
   --fg-positive: var(--sn-green-400);
   --fg-negative: var(--sn-red-400);
 
-  --icon-default: var(--sn-ink-500);
-  --icon-hover: var(--sn-ink-300);
+  --icon-default: rgba(252, 253, 255, 0.4);
+  --icon-hover: rgba(252, 253, 255, 0.7);
   --icon-accent: var(--sn-blue-300);
 
-  --border-default: var(--sn-ink-700);
-  --border-subtle: var(--sn-ink-700);
-  --border-divider: var(--sn-ink-700);
-  --ring-card: var(--sn-ink-700);
-  --ring-control: var(--sn-ink-650);
-  --ring-control-raised: var(--sn-ink-650);
+  /* Edges — black rings and grooves instead of light borders */
+  --border-default: rgba(0, 0, 0, 0.4);
+  --border-subtle: rgba(0, 0, 0, 0.4);
+  --border-divider: rgba(0, 0, 0, 0.4);
+  --ring-card: rgba(0, 0, 0, 0.12);
+  --ring-control: rgba(0, 0, 0, 0.12);
+  --ring-control-raised: #000000;
   --ring-focus: rgba(91, 150, 255, 0.55);
 
   --accent-solid: var(--sn-blue-500);
@@ -213,7 +218,7 @@
   --series-net: rgba(91, 150, 255, 0.32);
   --series-net-ring: rgba(91, 150, 255, 0.45);
   --chart-grid-opacity: 0.12;
-  --chart-crosshair: var(--sn-ink-400);
+  --chart-crosshair: rgba(252, 253, 255, 0.6);
 
   --toggle-track-from: #2a6dff;
   --toggle-track-to: #1067ff;
@@ -221,12 +226,14 @@
   --toggle-thumb-from: #ffffff;
   --toggle-thumb-to: #e4e4e7;
 
-  --shadow-card: 0px 1px 2px 0px rgba(0, 0, 0, 0.4), 0px 0px 0px 1px var(--ring-card);
-  --shadow-control: 0px 1px 2px 0px rgba(0, 0, 0, 0.4), 0px 0px 0px 1px var(--ring-control);
-  --shadow-control-raised: 0px 1px 2px 0px rgba(0, 0, 0, 0.4), 0px 0px 0px 1px var(--ring-control-raised);
-  --shadow-avatar: 0px 1px 2px 0px rgba(0, 0, 0, 0.4), 0px 0px 0px 1px var(--ring-control);
-  --shadow-tooltip: 0px 8px 24px 0px rgba(0, 0, 0, 0.5), 0px 0px 0px 1px var(--sn-ink-650);
-  --shadow-popover: 0px 12px 32px -4px rgba(0, 0, 0, 0.6), 0px 0px 0px 1px var(--ring-card);
+  /* Elevation — drop shadow, black ring, 4% white top edge + inner ring */
+  --shadow-card: 0px 2px 4px 0px rgba(0, 0, 0, 0.16), 0px 0px 0px 1px var(--ring-card), inset 0px 1px 0px 0px rgba(255, 255, 255, 0.04), inset 0px 0px 0px 1px rgba(253, 253, 255, 0.04);
+  --shadow-control: 0px 2px 4px -1px rgba(0, 0, 0, 0.08), 0px 1px 1px -1px rgba(0, 0, 0, 0.12), 0px 0px 0px 1px var(--ring-control), inset 0px 1px 0px 0px rgba(255, 255, 255, 0.04), inset 0px 0px 0px 1px rgba(253, 253, 255, 0.04);
+  --shadow-control-raised: 0px 4px 8px 0px rgba(0, 0, 0, 0.08), 0px 2px 4px 0px rgba(0, 0, 0, 0.12), 0px 1px 2px 0px rgba(0, 0, 0, 0.16), 0px 0px 0px 1px var(--ring-control-raised), inset 0px 1px 0px 0px rgba(255, 255, 255, 0.04), inset 0px 0px 0px 1px rgba(253, 253, 255, 0.04);
+  --shadow-control-pressed: inset 0px 1px 2px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 1px var(--ring-control);
+  --shadow-avatar: 0px 1px 2px 0px rgba(0, 0, 0, 0.16), 0px 0px 0px 1px rgba(0, 0, 0, 0.4);
+  --shadow-tooltip: 0px 8px 16px 0px rgba(0, 0, 0, 0.32), 0px 0px 0px 1px rgba(0, 0, 0, 0.32), inset 0px 1px 0px 0px rgba(255, 255, 255, 0.06);
+  --shadow-popover: 0px 24px 48px 0px rgba(0, 0, 0, 0.12), 0px 10px 18px 0px rgba(0, 0, 0, 0.12), 0px 5px 8px 0px rgba(0, 0, 0, 0.16), 0px 2px 4px 0px rgba(0, 0, 0, 0.16), 0px 0px 0px 1px rgba(0, 0, 0, 0.12), inset 0px 1px 0px 0px rgba(255, 255, 255, 0.04), inset 0px 0px 0px 1px rgba(253, 253, 255, 0.04);
   --shadow-inner-glow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.04);
   --highlight-edge: transparent;
 }
@@ -311,6 +318,7 @@
   /* Semantic colours → utilities: bg-surface, text-fg-muted, border-default… */
   --color-app: var(--bg-app);
   --color-surface: var(--bg-surface);
+  --color-control: var(--bg-control);
   --color-sunken: var(--bg-sunken);
   --color-hover: var(--bg-hover);
   --color-pressed: var(--bg-pressed);
